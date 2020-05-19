@@ -80,6 +80,7 @@ Activate the virtual environment:
 	source ./env/bin/activate
 	
 Run the program:
+
 	(in the ai-ethnobotany directory)    	
 	python3 main.py chrome no-debug
 
