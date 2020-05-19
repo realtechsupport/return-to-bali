@@ -51,13 +51,6 @@ class GetTextinputs(FlaskForm):
     auth = FileField(label='key for capture-text (.json)', default='HELLO WORLD')
     lang = SelectField('language spoken in video segment', choices =  [('en-US', 'English'),('fr', 'French'),('id-ID', 'Bahasa Indonesia')], default=('id-ID'), validators=[validators.InputRequired()])
 
-class AnotateInputs(FlaskForm):
-    vid = FileField(label='field video', default='HELLO WORLD')
-    mic = SelectField(label='microphone', choices =  [('0,0', 'default'),('AT2020', 'AT2020'),('USB Audio', 'USB Audio')], default=('default'), validators=[validators.InputRequired()])
-    sa_m = IntegerField(label='start minute (0-59)', default=0, validators=[NumberRange(min=0, max=59), validators.InputRequired()])
-    sa_s = IntegerField(label='start second (0-59)', default=0, validators=[NumberRange(min=0, max=59), validators.InputRequired()])
-    ea_m = IntegerField(label='end minute (0-59)', default=0, validators=[NumberRange(min=0, max=59), validators.InputRequired()])
-    ea_s = IntegerField(label='end second (0-59)', default=0, validators=[NumberRange(min=0, max=59), validators.InputRequired()])
 
 class PrepareInputs(FlaskForm):
     vid = FileField(label='video', default='')
@@ -65,10 +58,10 @@ class PrepareInputs(FlaskForm):
 
 class VideoLabelInputs(FlaskForm):
     vid = FileField(label='video', default='HELLO WORLD', validators=[validators.InputRequired()])
-    framerate = IntegerField(label='framerate (opt b; 1-30)', default=5, validators=[NumberRange(min=1, max=30), validators.InputRequired()])
-    folder = StringField(label='foldername (opt b)', default='category', validators=[validators.InputRequired()])
-    label = StringField(label='keyterm (opt a)', default='searchterm', validators=[validators.InputRequired()])
-    nimages = IntegerField(label='images / utterance (opt a; 1-30)', default=20, validators=[NumberRange(min=1, max=30), validators.InputRequired()])
-    conf = FloatField(label='confidence threshold for STT (opt a; 0.0 - 1.0)', default=0.90, validators=[validators.InputRequired()])
-    auth = FileField(label='key for capture-text (.json; opt a)', default='HELLO WORLD')
-    lang = SelectField('language in video segment (opt a)', choices =  [('en-US', 'English'),('fr', 'French'),('id-ID', 'Bahasa Indonesia')], default=('id-ID'), validators=[validators.InputRequired()])
+    framerate = IntegerField(label='framerate (1-30)', default=5, validators=[NumberRange(min=1, max=30), validators.InputRequired()])
+    folder = StringField(label='foldername', default='category', validators=[validators.InputRequired()])
+    #label = StringField(label='keyterm (opt a)', default='searchterm', validators=[validators.InputRequired()])
+    #nimages = IntegerField(label='images / utterance (opt a; 1-30)', default=20, validators=[NumberRange(min=1, max=30), validators.InputRequired()])
+    #conf = FloatField(label='confidence threshold for STT (opt a; 0.0 - 1.0)', default=0.90, validators=[validators.InputRequired()])
+    #auth = FileField(label='key for capture-text (.json; opt a)', default='HELLO WORLD')
+    #lang = SelectField('language in video segment (opt a)', choices =  [('en-US', 'English'),('fr', 'French'),('id-ID', 'Bahasa Indonesia')], default=('id-ID'), validators=[validators.InputRequired()])
