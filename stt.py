@@ -76,35 +76,3 @@ def extract_text(app, videofile, language, startsecs, duration, chunk, tconfiden
     return(results, searchresults)
 
 #-------------------------------------------------------------------------------
-def label_images(app, videonamepath, language, authsource, key, maxattempts, nimages, tconfidence):
-    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = authsource
-    duration = get_video_length(videonamepath)
-    duration_s = hms_to_seconds(duration)
-    videopath = (videonamepath.split('.'))[0]
-
-    if(duration_s < 60):
-        audiofile_1ch = videopath + '_1ch_16k.wav'
-        command = "ffmpeg -i " + videonamepath + " -loglevel panic -y -ab 160k -ac 1 -ar 16000 -vn " + audiofile_1ch
-        subprocess.call(command, shell=True)
-        transcribe_file_with_word_time_offsets(app, audiofile_1ch, videonamepath, key, language, maxattempts, nimages, tconfidence)
-
-    else:
-        print('dividing 60 sec ++ video into segments ...')
-        source = videonamepath
-        chunksize = 0.75
-        location = app.config['TMP']
-        nfiles = chunk_large_videofile(source, chunksize, location)
-        os.remove(videonamepath)
-
-        path, dirs, files = next(os.walk(location))
-        for file in files:
-            videoname = (file.split('.'))[0]
-            audiofile_1ch = videoname + '_1ch_16k.wav'
-            cvideo = os.path.join(location, file)
-            caudio_1ch = os.path.join(location, audiofile_1ch)
-            command = "ffmpeg -i " + cvideo + " -loglevel panic -y -ab 160k -ac 1 -ar 16000 -vn " + caudio_1ch
-            subprocess.call(command, shell=True)
-            transcribe_file_with_word_time_offsets(app, caudio_1ch, cvideo, key, language, maxattempts, nimages, tconfidence)
-
-    print('finished label images test')
-#-------------------------------------------------------------------------------
