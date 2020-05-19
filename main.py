@@ -242,8 +242,7 @@ def checkimagesview():
 
             #find the highest number in the destination and the lowest in the source
             dfiles = glob.glob(destination + '/*.jpg')
-            source = os.path.join(app.config['IMAGES'], key)
-
+            source = os.path.join(app.config['IMAGES'], category)
             sfiles = glob.glob(source + '/*.jpg')
 
             try:
