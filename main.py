@@ -31,21 +31,21 @@ from pyt_utilities import *
 app = Flask(__name__, template_folder="templates")
 cwd = app.root_path
 
-t_dir = cwd + '/tmp/';          a_dir = cwd + '/anotate/'
+t_dir = cwd + '/tmp/';
 s_dir = cwd + '/static/';       i_dir = cwd + '/images/'
 m_dir = cwd + '/models/';       c_dir = cwd + '/collection/'
 r_dir = cwd + '/results/';      ar_dir = cwd + '/archive/'
 f_dir = cwd + '/find/';         cl_dir = cwd + '/classify/'
 te_dir = cwd + '/tests/'
 
-dirs = [t_dir, a_dir, s_dir, i_dir, m_dir, c_dir, r_dir, ar_dir, f_dir, cl_dir, te_dir]
+dirs = [t_dir, s_dir, i_dir, m_dir, c_dir, r_dir, ar_dir, f_dir, cl_dir, te_dir]
 for dir in dirs:
     if not os.path.exists(dir):
         os.makedirs(dir)
 
 app.config['SECRET_KEY'] = 'you-will-not-guess'
 app.config['TMP'] = t_dir;      app.config['STATIC'] = s_dir
-app.config['ANOTATE'] = a_dir;  app.config['IMAGES'] = i_dir
+app.config['IMAGES'] = i_dir
 app.config['MODELS'] = m_dir;   app.config['COLLECTION'] = c_dir
 app.config['RESULTS'] = r_dir;  app.config['FIND'] = f_dir
 app.config['ARCHIVE'] = ar_dir; app.config['CLASSIFY'] = cl_dir
@@ -61,7 +61,7 @@ socketio = SocketIO(app, async_mode="eventlet")
 def index():
     session.clear()
     formats = ('*.json', '*.webm', '*.wav', '*.mp4', '*.MP4', '*.txt', '*.zip', '*.prof', '*.mkv', '*.jpg', '*.csv', '*.pth')
-    locations = ('STATIC', 'ANOTATE', 'TMP', 'IMAGES', 'RESULTS')
+    locations = ('STATIC', 'TMP', 'IMAGES', 'RESULTS')
     exception = 'voiceover'
 
     try:
@@ -220,18 +220,12 @@ def checkimagesview():
     current_video = ''
     category = ''
     dfiles = ''
-    key = ''
     template = 'checkimagesview.html'
 
-    key = session.get('s_key', None)
     videoname = session.get('s_videoname', None)
     current_video = videoname.split('/')[-1]
     category = session.get('s_category', None)
-
-    if(key == ''):
-        images = os.listdir(app.config['IMAGES'] + category)
-    else:
-        images = os.listdir(app.config['IMAGES'] + key)
+    images = os.listdir(app.config['IMAGES'] + category)
 
     lastentry_d = 0; firstentry_s = 0
 
@@ -241,20 +235,14 @@ def checkimagesview():
         lum_min = form.lum_min.data;
 
         if("add" in request.form):
-            if(key == ''):
-                destination = os.path.join(app.config['COLLECTION'], category)
-            else:
-                destination = os.path.join(app.config['COLLECTION'], key)
+            destination = os.path.join(app.config['COLLECTION'], category)
 
             if not os.path.exists(destination):
                 os.makedirs(destination)
 
             #find the highest number in the destination and the lowest in the source
             dfiles = glob.glob(destination + '/*.jpg')
-            if(key == ''):
-                source = os.path.join(app.config['IMAGES'], category)
-            else:
-                source = os.path.join(app.config['IMAGES'], key)
+            source = os.path.join(app.config['IMAGES'], key)
 
             sfiles = glob.glob(source + '/*.jpg')
 
@@ -290,11 +278,7 @@ def checkimagesview():
             try:
                 images2remove = session.get('s_images2remove', None)
                 imlist = json.loads(images2remove)
-                if(key == ''):
-                    im_loc = os.path.join(app.config['IMAGES'], category) + '/'
-                else:
-                    im_loc = os.path.join(app.config['IMAGES'], key) + '/'
-
+                im_loc = os.path.join(app.config['IMAGES'], key) + '/'
                 im_ref =  imlist[-1]
                 nbad = remove_fuzzy_over_under_exposed(im_ref, im_loc, images, ssim_min, lum_max, lum_min)
                 print('removed ' +  str(nbad) + ' images...')
@@ -307,12 +291,7 @@ def checkimagesview():
                 images2remove = session.get('s_images2remove', None)
                 imlist = json.loads(images2remove)
                 for im in imlist:
-                    if(key == ''):
-                        im_s = os.path.join(app.config['IMAGES'], category, im)
-
-                    else:
-                        im_s = os.path.join(app.config['IMAGES'], key, im)
-
+                    im_s = os.path.join(app.config['IMAGES'], key, im)
                     print(im_s)
                     try:
                         os.remove(im_s)
@@ -349,21 +328,13 @@ def checkimagesview():
             except ValueError:
                 pass
 
-    if(key == ''):
-        return render_template(template, form=form, category = category, videoname = current_video, images = images)
-    else:
-        return render_template(template, form=form, category = key, videoname = current_video, images = images)
+    return render_template(template, form=form, category = category, videoname = current_video, images = images)
 
 #-------------------------------------------------------------------------------
 @app.route('/checkimagesview/<filename>')
 def send_image(filename):
     category = session.get('s_category', None)
-    key = session.get('s_key', None)
-    if(key == ''):
-        location = 'images/' + category
-    else:
-        location = 'images/' + key
-
+    location = 'images/' + category
     return send_from_directory(location, filename)
 
 #-------------------------------------------------------------------------------
@@ -374,7 +345,6 @@ def labelimagesview():
     videoname = ''
     file = ''
     category = ''
-    key = ''
     template = 'labelimagesview.html'
 
     if (request.method == 'POST'):
@@ -396,34 +366,9 @@ def labelimagesview():
             create_images_from_video(savepath, category, videonamepath, framerate)
             print('FINISHED bulk saving')
 
-        elif("audio" in request.form):
-            print('...labelling with keys')
-            key = form.label.data
-            language = form.lang.data
-
-            try:
-                file = request.files['auth']
-                auth = secure_filename(file.filename)
-                authsource = os.path.join(app.config['STATIC'], auth)
-                file.save(authsource)
-            except:
-                print('no credential file selected - cannot capture text without a valid [.json] credential ')
-                return redirect(url_for('labelimagesview'))
-
-            file = request.files['vid']
-            videoname= secure_filename(file.filename)
-            videonamepath = os.path.join(app.config['TMP'], videoname)
-            file.save(videonamepath)
-
-            nimages = form.nimages.data
-            tconfidence = form.conf.data
-            maxattempts = 5
-            label_images(app, videonamepath, language, authsource, key, maxattempts, nimages, tconfidence)
-            print('FINISHED labelling by keys')
-
     session['s_videoname'] = videoname
     session['s_category'] = category
-    session['s_key'] = key
+
 
     return render_template(template, form=form, showvideo=videoname)
 
@@ -460,9 +405,7 @@ def testclassifiers():
 
         if("display" in request.form):
             session['s_testcollection'] = testcollection
-            #display = True; session['s_choices'] = ''
 
-        #elif("classify" in request.form):
         elif(("classify" in request.form) and (session.get('s_choices', None) != '' )):
             classifier = form.classifier.data
             session['s_testcollection'] = testcollection
@@ -657,137 +600,6 @@ def prepareview():
 
     return render_template(template, form=form, result=chunkresult)
 
-#-------------------------------------------------------------------------------
-@app.route('/audioanotate', methods=['GET', 'POST'])
-def audioanotate():
-    form = AnotateInputs()
-    template = 'audioanotate.html'
-    filename = ''
-    cut_video = ''
-    session['s_filename_w'] = ''
-    upl = False
-
-    if (request.method == 'POST'):
-        if("load" in request.form):
-            print('in recording section')
-            mic = form.mic.data
-            try:
-                file = request.files['vid']
-                filename = secure_filename(file.filename).lower()
-                print(filename)
-                revsource = os.path.join(app.config['STATIC'], filename)
-                ansource = os.path.join(app.config['ANOTATE'], filename)
-                file.save(revsource)
-                time.sleep(1)
-                copyfile(revsource, ansource)
-            except:
-                print('please select a video...')
-                return redirect(url_for('audioanotate'))
-
-            cardn, devicen = mic_info(mic)
-            session['cardn'] = cardn
-            session['devicen'] = devicen
-            session['s_filename'] = filename
-
-        elif("remove" in request.form):
-            print('removing old voice-over assets')
-            tpatterns = ('*.webm', '*.wav', '*.mp4', '*.MP4', '*.mkv')
-            tlocations = ('STATIC', 'ANOTATE', 'TMP')
-            texception = 'nothing'
-            try:
-                removefiles(app, tpatterns, tlocations, texception)
-            except:
-                return redirect(url_for('audioanotate'))
-
-        elif("check" in request.form):
-            print('recording 3 seconds of audio for system check... ')
-            mic = form.mic.data
-            cardn, devicen = mic_info(mic)
-            session['cardn'] = cardn
-            session['devicen'] = devicen
-            dur = 3;
-            output = os.path.join(app.config['TMP'], 'audiocheck.wav')
-            record_and_playback(dur, cardn, devicen, output)
-            return redirect(url_for('audioanotate'))
-
-    if (request.method == 'POST'):
-        if("segment" in request.form):
-            print('in SEGMENT section')
-            sa_h = 0; sa_m = form.sa_m.data; sa_s = form.sa_s.data
-            ea_h = 0; ea_m = form.ea_m.data; ea_s = form.ea_s.data
-
-            start_cut = sa_s + 60*sa_m + 3600*sa_h
-            end_cut = ea_s + 60*ea_m + 3600*ea_h
-            duration = end_cut - start_cut
-            session['start_cut'] = start_cut
-            session['end_cut'] = end_cut
-
-            video = session.get('s_filename')
-            try:
-                cut_video = get_segment(video, start_cut, end_cut)
-            except:
-                print('something wrong - did you set start and end time correctly?')
-                return redirect(url_for('audioanotate'))
-
-            session['s_filename_w'] = cut_video
-            session['s_filename'] = cut_video
-
-            videoformat = (video.split('.')[1]).lower()
-            if(videoformat == 'mp4'):
-                cut_video = convert_mp4_to_webm_rt(cut_video)
-                print('conversion of segment from .mp4 to .webm finished.....')
-                session['s_filename'] = cut_video
-
-            source = os.path.join(app.config['ANOTATE'], cut_video)
-            destination = os.path.join(app.config['STATIC'], cut_video)
-            copyfile(source, destination)
-            filename = cut_video
-            print('voiceover file now in anotate folder.')
-
-    return render_template(template, form=form, showvideo=filename)
-
-#-------------------------------------------------------------------------------
-@socketio.on('event')
-def handle_my_custom_namespace_event(jsondata):
-    print('received json: ' + str(jsondata))
-
-@socketio.on('response')
-def handle_response(jsondata):
-
-    card =  session.get('cardn')
-    device = session.get('devicen')
-    vid_display = session.get('s_filename')
-    video = session.get('s_filename_w')
-    #print('In the handle response... the display video is now: ', vid_display)
-
-    st = session.get('start_cut')
-    end = session.get('end_cut')
-    #get data from the user
-    (k,v), = jsondata.items()
-
-    os.chdir(app.config['ANOTATE'])
-
-    if(k == 'start'):
-        if (session.get('nrecordings') == None):
-            session['nrecordings'] = 1
-        else:
-            #print('KEY, VALUE: ', k,v)
-            duration = get_video_length(video)
-            print('actual video duration: ', duration)
-            newaudio = 'naudio_' + video.split('.')[0] + '.wav'
-            voiceover_recording(duration, card, device, newaudio)
-
-            #remove noise if necessary ...crecording = cleanrecording(output)
-            vformat = video.split('.')[1]
-            if (vformat == 'mp4'):
-                updated_vformat = '.mp4'
-            else:
-                updated_vformat = '.mkv'
-
-            combination = 'voiceover_' + str(st) + '-' + str(end) + '_' + video.split('.')[0] + updated_vformat
-            result = combine_recordingvideo(newaudio, video, combination)
-
-            print(result)
 #-------------------------------------------------------------------------------
 
 if __name__ == '__main__':
