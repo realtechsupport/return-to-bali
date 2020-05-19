@@ -78,9 +78,9 @@ Instructions to generate a key:
 Activate the virtual environment:		
 
 	source ./env/bin/activate
-
-Start AIE (in the ai-ethnobotany directory):      	
 	
+Run the program:
+	(in the ai-ethnobotany directory)    	
 	python3 main.py chrome no-debug
 
 To run in debug mode replace’ no-debug’ with ‘debug’. Firefox is also supported, but less stable.
@@ -89,13 +89,12 @@ AI in Ethnobotany
 
 crtl +  /  ctrl – 	increase / decrease zoom factor.
 
-
-Stop AIE
-
 Stop the app from the terminal:					
 ctrl-c
+
 Exit environment at the terminal:				
 ctrl-d
+
 If you see browser errors .. clear the browsing history: 	
 ctrl-H
 clear browsing data
