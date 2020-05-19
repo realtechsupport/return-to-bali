@@ -27,10 +27,10 @@
     'Supported formats: .webm and .mp4 .' +
     'Segments of 10 minutes or so are ok for viewing and bulk labeling.' +
     'If your field videos are .mp4, smaller files are better - 3min or less.' +
-    'Segments of about 3 minutes are suggested for text processing and audio labeling.' +
+    'Segments of about 3 minutes are suggested for text processing.' +
     '\n\nChunked segments are in the tmp directory.' +
-    '\n\nProceed to \' text from video\' or \'video annotation\' to process the chunks. ' +
-    '\'Back to start\' will delete these temporary files.'
+    '\n\nProceed to \' text from video\' to process the chunks. ' +
+    '\'Back to start\' will delete temporary files.'
 
     );
     }
@@ -78,9 +78,6 @@
 <style> a:link{background-color: #DCDCDC; padding-bottom: 6px; padding-top: 6px; padding-right: 10px; padding-left: 10px; text-align: center; text-decoration: none; display: inline-block; } </style>
 <a href="{{ url_for('inputview') }}"> continue to text from video </a>
 &nbsp&nbsp&nbsp&nbsp
-<style> a:link{background-color: #DCDCDC; padding-bottom: 6px; padding-top: 6px; padding-right: 10px; padding-left: 10px; text-align: center; text-decoration: none; display: inline-block; } </style>
-<a href="{{ url_for('audioanotate') }}"> continue to video annotation </a>
-<br><br>
 <style> a:link{background-color: #FFFFFF; padding-bottom: 6px; padding-top: 6px; padding-right: 10px; padding-left: 10px; text-align: center; text-decoration: none; display: inline-block; } </style>
 <a href="{{ url_for('index') }}"> back to start </a>
 
