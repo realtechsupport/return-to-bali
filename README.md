@@ -1,6 +1,6 @@
 # AI in Ethnobotany
 
-	Introduction
+# Introduction
 
 AI in Ethnobotany (AIE) is a collection of procedures that allow one to apply machine learning classification onto field videos. AIE’s goal is to facilitate the creation of under-represented knowledge in machine learning in general, and experimental datasets for neural network image classification in particular. AIE allows anyone with a mobile phone to create viable datasets for image classification and to train state of the art convolutional neural networks with these datasets.
 
@@ -10,13 +10,13 @@ This software and the bali-26 dataset are the basis for the ‘Return to Bali’
 http://www.realtechsupport.org/new_works/return2bali.html 
 
 
-	License
+# License
 
 Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)
 Cite this software project as follows: ‘Catch&Release version1’
 
 
-	Platform Information
+# Context
 
 AIE runs on Linux under Python3 and Flask with Chromium or Firefox. AIE uses the PyTorch framework to train and test image classifiers and connects to the Google Speech API (free) for speech processing. Library versions and dependencies are given in the requirements file. 
 AIE has been tested on a desktop (i7-4770 CPU with 16GB of memory) and a laptop (i7-3667 CPU with 8GB of memory) with Ubuntu 18.04 TLS under kernels 5.2.8 and 5.3.0 with images sourced from .mp4 and .webm video (HD [1920 x 1080] at 30f/s; .mp4  H.264 encoded) from multiple (android OS) mobile phones and GoPro Hero 6 action cameras.
@@ -27,7 +27,7 @@ https://chrome.google.com/webstore/detail/classic-cache-killer/kkmknnnjliniefekp
 
 
 
-	Software Installation
+# Software Installation
 
 Clone the AIE repository on GitHub
 Open a terminal window and type:
