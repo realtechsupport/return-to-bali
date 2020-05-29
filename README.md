@@ -79,14 +79,11 @@ Activate the virtual environment:
 
 	source ./env/bin/activate
 	
-Run the program:
+Run the program:   
 
-	(in the ai-ethnobotany directory)    	
-	python3 main.py chromium no-debug
+	python3 main.py browser debug_mode
 
-To run in debug mode replace’ no-debug’ with ‘debug’. Firefox is also supported, but less stable.
-The terminal window will display comments. You should see the launch screen in a browser window:  
-AI in Ethnobotany
+browser = firefox or chromium; debug_mode = debug or no-debug. The terminal window will display comments. You should see the launch screen in a browser window.
 
 crtl +  /  ctrl – 	increase / decrease zoom factor.
 
