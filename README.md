@@ -82,7 +82,7 @@ Activate the virtual environment:
 Run the program:
 
 	(in the ai-ethnobotany directory)    	
-	python3 main.py chrome no-debug
+	python3 main.py chromium no-debug
 
 To run in debug mode replace’ no-debug’ with ‘debug’. Firefox is also supported, but less stable.
 The terminal window will display comments. You should see the launch screen in a browser window:  
