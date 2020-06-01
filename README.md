@@ -27,14 +27,17 @@ AIE has been tested on a desktop (i7-4770 CPU with 16GB of memory) and a laptop 
 Recommended browser: Chromium.
 
 Install Chromium on Ubuntu:
-sudo apt install -y chromium-browser
+
+	sudo apt install -y chromium-browser
 
 Install Chromium on Mac OS:
-https://apple.stackexchange.com/questions/78805/chromium-builds-for-mac-os-x/215426#215426
-(Currently recommended method)
+
+	https://apple.stackexchange.com/questions/78805/chromium-builds-for-mac-os-x/215426#215426
+	(Currently recommended method)
 
 Install the free Classic Cache Killer:
-https://chrome.google.com/webstore/detail/classic-cache-killer/kkmknnnjliniefekpicbaaobdnjjikfp?hl=en 
+
+	https://chrome.google.com/webstore/detail/classic-cache-killer/kkmknnnjliniefekpicbaaobdnjjikfp?hl=en 
 
 
 
