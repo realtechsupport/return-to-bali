@@ -98,7 +98,7 @@ AI in Ethnobotany
 
 crtl + / ctrl – increase / decrease zoom factor.
 
-<b>Stop AIE </>
+<b>Stop AIE </b>
 At terminal:					
 ctrl-c
 
