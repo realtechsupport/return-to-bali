@@ -13,13 +13,13 @@ http://www.realtechsupport.org/new_works/return2bali.html
 <b>License</b>
 
 Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)
-Cite this software project as follows: ‘Catch&Release version1’
+Cite this software project as follows: ‘AI_in_Ethnobotany version1’
 
 
 <b>Context</b>
 
-AIE runs on Linux under Python3 and Flask with Chromium or Firefox. AIE uses the PyTorch framework to train and test image classifiers and connects to the Google Speech API (free) for speech processing. Library versions and dependencies are given in the requirements file. 
-AIE has been tested on a desktop (i7-4770 CPU with 16GB of memory) and a laptop (i7-3667 CPU with 8GB of memory) with Ubuntu 18.04 TLS under kernels 5.2.8 and 5.3.0 with images sourced from .mp4 and .webm video (HD [1920 x 1080] at 30f/s; .mp4  H.264 encoded) from multiple (android OS) mobile phones and GoPro Hero 6 action cameras.
+AIE runs on Linux and Mac OS under Python3 and Flask with Chromium or Firefox. AIE uses the PyTorch framework to train and test image classifiers and connects to the Google Speech API (free) for speech processing. Library versions and dependencies are given in the requirements file. 
+AIE has been tested on a desktop (i7-4770 CPU with 16GB of memory) and a laptop (i7-3667 CPU with 8GB of memory) with Ubuntu (18.04 TLS under kernels 5.2.8 and 5.3.0) and Mac Os (Catalina) with images sourced from .mp4 and .webm video (HD [1920 x 1080] at 30f/s; .mp4  H.264 encoded) from multiple (android OS) mobile phones and GoPro Hero 6 action cameras.
 
 
 <b>Browser Installation</b>
