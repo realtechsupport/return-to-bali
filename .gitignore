@@ -1,0 +1,12 @@
+#Virtual Environments
+venv/
+
+#Data Folders
+models/
+tests/
+find/
+
+#Pycharm
+.idea/
+
+__pycache__/
