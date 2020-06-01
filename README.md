@@ -102,9 +102,6 @@ crtl + / ctrl – increase / decrease zoom factor.
 At terminal:					
 ctrl-c
 
-Exit environment:				
-ctrl-d
-
 If you see browser errors .. clear the browsing history: 	
 ctrl-H
 clear browsing data
