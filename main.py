@@ -8,11 +8,16 @@
 #-------------------------------------------------------------------------------
 #1. start virtual env
 #2. launch the program
-# python3 main.py chrome no-debug OR python3 main.py chrome debug
-# python3 main.py firefox no-debug OR python3 main.py firefox debug
+# python3 main.py ubuntu firefox debug, or
+# python3 main.py mac chromium no-debug\' for example.
+
+# OS: ubuntu or mac. Browsers: chromium or firefox.
+#(works on Mac OS as well)
 
 # issue: can not get flask-caching to work properly
 # solution: Classic Cache Killer for Chrome; after install check options (right click, enable at start)
+
+
 #------------------------------------------------------------------------------
 import sys, os, time, shutil, glob
 import eventlet, json
@@ -606,17 +611,22 @@ def prepareview():
 #-------------------------------------------------------------------------------
 
 if __name__ == '__main__':
-    if(len(sys.argv) < 2):
-        print('\nplease provide browser and dubug choice when you start the program.')
-        print('\'python3 main.py firefox debug\', or \'python3 main.py chromium no-debug\' for example.\n')
+    if(len(sys.argv) < 3):
+        print('\nplease provide OS, browser and dubug choice when you start the program.')
+        print('\'python3 main.py ubuntu firefox debug\', or \'python3 main.py mac chromium no-debug\' for example.\n')
+        print('OS: ubuntu or mac. Browsers: chromium or firefox.\n')
         sys.exit(2)
     else:
         try:
-            browser = sys.argv[1]
-            debug_mode = sys.argv[2]
-            print('\n > using this browser: ', browser)
+            osy = sys.argv[1]
+            browser = sys.argv[2]
+            debug_mode = sys.argv[3]
+            print('\n > operating system: ', osy)
+            print('> browser: ', browser)
+            print('> mode: ', debug_mode)
         except:
-            print('... using default chromium in non-debug mode ...')
+            print('... using default ubuntu and chromium in non-debug mode ...')
+            osy = 'ubuntu'
             browser = 'chromium-browser'
             debug_mode = 'debug'
 
@@ -627,7 +637,12 @@ if __name__ == '__main__':
     else:
         browser = 'chromium-browser'
 
-    threading.Timer(1.25, lambda: webbrowser.get(browser).open(url) ).start()
+
+    if('ubuntu' in osy):
+        threading.Timer(1.25, lambda: webbrowser.get(browser).open(url) ).start()
+    else:
+        threading.Timer(1.25, lambda: webbrowser.get('open -a /Applications/Chromium.app %s')).start()
+
     if(debug_mode == 'debug'):
         socketio.run(app, port=port, debug=True)
     else:
