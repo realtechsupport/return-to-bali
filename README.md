@@ -108,7 +108,7 @@ ctrl-c
 
 If you see browser errors .. clear the browsing history: 	
 ctrl-H, 
-clear browsing data
+clear browsing data,
 clear data
 
 <i>Check the README.pdf file in the repository for a detailed description on how to use the modules in AIE.</i>
