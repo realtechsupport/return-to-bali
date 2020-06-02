@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 # main.py
-# Catch & Release
-# Flask interface for linux computers
-# experiments in knowledge documentation; with an application to AI for ethnobotany
+# AI in Ethnobotany
 # spring 2020
 # tested on ubuntu 18 LTS, kernel 5.3.0
 #-------------------------------------------------------------------------------
