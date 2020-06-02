@@ -107,7 +107,7 @@ At terminal:
 ctrl-c
 
 If you see browser errors .. clear the browsing history: 	
-ctrl-H
+ctrl-H, 
 clear browsing data
 clear data
 
