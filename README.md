@@ -16,6 +16,7 @@ Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)
 Cite this software project as follows: ‘AI_in_Ethnobotany version1’
 
 
+
 <b>Context</b>
 
 AIE runs on Linux and Mac OS under Python3 and Flask with Chromium or Firefox. AIE uses the PyTorch framework to train and test image classifiers and connects to the Google Speech API (free) for speech processing. Library versions and dependencies are given in the requirements file. 
