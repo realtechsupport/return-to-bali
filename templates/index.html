@@ -20,7 +20,7 @@
   <center>
   <br><br><br>
 
-  ... general procedures for field video processing ...
+  <i>... general procedures for field video processing ...</i>
 
   <h2>
   <style> a:link{background-color: #FFFFFF; color: #808080;  padding: 10px 20px; text-align: center; text-decoration: none; display: inline-block; } </style>
@@ -32,14 +32,20 @@
   <a href="{{ url_for('labelimagesview') }}">label images from field video</a>
   </h2>
 
-  <br><br>
-  ... image classification with the bali-26 dataset ...
+  <br><br><br>
+  <i>... modules specific to a field study in Central Bali (Indonesia) ...</i>
   <br>
 
   <h2>
-  <a href="{{ url_for('trainclassifiers') }}">train an image classifier</a>
+  <a href="{{ url_for('contextview') }}">background information on the bali-26 dataset</a>
   <br>
-  <a href="{{ url_for('testclassifiers') }}">evaluate an image classifier</a>
+  <a href="{{ url_for('weathersatview') }}">realtime climate and satellite views</a>
+  <br>
+  <a href="{{ url_for('plantsview') }}">flora and religious practices</a>
+  <br>
+  <a href="{{ url_for('trainclassifiers') }}">train an image classifier with data from the bali-26 collection</a>
+  <br>
+  <a href="{{ url_for('testclassifiers') }}">evaluate image classifiers on the bali-26 dataset</a>
   </h2>
 
   <br><br>
