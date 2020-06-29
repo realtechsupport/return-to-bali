@@ -9,6 +9,9 @@ import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import numpy
 import pandas
+from PIL import Image
+from PIL import ImageFont
+from PIL import ImageDraw
 pandas.set_option('display.max_columns', 50)
 pandas.set_option('display.width', 1000)
 import csv
@@ -85,13 +88,11 @@ def create_weatherplot(referenceweatherdatafile, currentweatherdatafile):
             results.append(row)
 
     for item in results:
-        if('timestamp' in item[0]):
+        if('localtime' in item[0]):
             newdate = item[1]
-
         elif('rainfall' in item[0]):
             nrain = float(item[1])
-
-        elif('cur_temp' in item[0]):
+        elif('current_temperature' in item[0]):
             ntemp = float(item[1])
 
     #map month and day onto the reference data (2018-2019)
@@ -116,7 +117,6 @@ def create_weatherplot(referenceweatherdatafile, currentweatherdatafile):
     #---------------------------------------------------------------------------
 
     fig, ax1 = plt.subplots(figsize=(24,8))
-
     ax1.set_facecolor('whitesmoke')
     ax1.scatter(dataset['Dates_only'], dataset['maxtemp'],  marker='o', s=5.0, alpha = 0.3, linewidths=None, edgecolors = 'none', c='r')
     ax1.scatter(dataset['Dates_only'], dataset['mintemp'],  marker='o', s=5.0, alpha = 0.2, linewidths=None, edgecolors = 'none', c='b')
@@ -125,7 +125,9 @@ def create_weatherplot(referenceweatherdatafile, currentweatherdatafile):
     ' and rainfall (green) \n red and green circles are current [' + month + '-' + day + ']' \
     ' temperature and rain data from a local weather station in Ubud, Bali mapped onto the reference chart below'
     '''
-    titletext = 'Bali Botanical Garden Research Station Climate Reference Year [Dec 2018 to Dec 2019]'
+    titletext = 'Temperature and rain fail typical of Central Bali (data from the Bali Botanical Garden, year 2018-2019) \n  ' + \
+    ' current data from Ubud added with red and green circles'
+
     ax1.set_title(titletext, fontdict={'fontsize': 18, 'fontweight': 'medium'})
     #ax1.set(xlabel = 'Date', ylabel = 'Temp [C]', title = titletext)
     ax1.set_ylabel('Temp [C]', fontsize = 16)
@@ -143,16 +145,62 @@ def create_weatherplot(referenceweatherdatafile, currentweatherdatafile):
     fig.subplots_adjust(bottom=0.2)
 
     plt.sca(ax1)
-    ax1.scatter(ndate, ntemp, marker='o', s=150, alpha = 1.0, color='w', edgecolors='darkred', linewidth=2.0)
+    ax1.scatter(ndate, ntemp, marker='o', s=150, alpha = 1.0, color='darkred', edgecolors='darkred', linewidth=2.0)
     plt.annotate(str(ntemp), (ndate, ntemp), textcoords='offset points', color = 'k', xytext=(0,10), ha='center', size=14)
 
     plt.sca(ax2)
-    ax2.scatter(ndate, nrain, marker='o', s=150, alpha = 1.0, color='w', edgecolors='darkgreen', linewidth=2.0)
+    ax2.scatter(ndate, nrain, marker='o', s=150, alpha = 1.0, color='darkgreen', edgecolors='darkgreen', linewidth=2.0)
     plt.annotate(str(nrain), (ndate, nrain), textcoords='offset points', color = 'k', xytext=(0,10), ha='center', size=14)
 
     weatherplot = referenceweatherdatafile.split('.csv')[0] + '.jpg'
     plt.savefig(weatherplot)
 
     return(weatherplot)
+
+#-------------------------------------------------------------------------------
+def create_weathertable(currentweatherdatafile):
+
+    data = pandas.read_csv(currentweatherdatafile, header=None)
+    data.drop(data.tail(1).index,inplace=True)
+    data.columns = ['', '']
+    #print (data)
+
+    fig, ax = plt.subplots(figsize=(8,6))
+    fig.patch.set_visible(False)
+
+
+    titletext = 'Latest weather in Ubud, Bali (30km from the Central Bali field site)'
+    ax.set_title(titletext, fontdict={'fontsize': 12, 'fontweight': 'medium'})
+    tt = ax.title
+    tt.set_position([0.5, 1.35])
+    fig.subplots_adjust(top=0.9)
+    fig.subplots_adjust(bottom=0.1)
+
+    table = ax.table(cellText=data.values, colLabels=data.columns, loc='center', cellLoc='center')
+    table.scale(1, 5)
+    fig.tight_layout()
+
+    weathertable = currentweatherdatafile.split('.csv')[0] + '_table.jpg'
+
+    ax.axis('off')
+    ax.axis('tight')
+    plt.savefig(weathertable)
+
+    return(weathertable)
+
+#-------------------------------------------------------------------------------
+def add_title(imagepath, title, titlesize):
+
+    img = mpimg.imread(imagepath)
+    fig, ax = plt.subplots(figsize=(10,10))
+    fig.patch.set_visible(False)
+    imgplot = plt.imshow(img)
+    ax.set_title(title, fontdict={'fontsize': titlesize, 'fontweight': 'medium'})
+    tt = ax.title
+    tt.set_position([0.5, 1.05])
+    plt.axis('off')
+    plt.savefig(imagepath)
+
+#-------------------------------------------------------------------------------
 
 #-------------------------------------------------------------------------------
