@@ -5,8 +5,15 @@ venv/
 models/
 tests/
 find/
+collection/
+ipynb_experiments/
 
 #Pycharm
 .idea/
 
+#VScode
+.vscode/
+
+*.json
 __pycache__/
+.ipynb_checkpoints/
