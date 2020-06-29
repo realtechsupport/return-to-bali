@@ -13,32 +13,17 @@ http://www.realtechsupport.org/new_works/return2bali.html
 <b>License</b>
 
 Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)
-Cite this software project as follows: ‘AI_in_Ethnobotany version1’
-
+Cite this software project as follows: ‘Catch&Release version1’
 
 
 <b>Context</b>
 
-AIE runs on Linux and Mac OS under Python3 and Flask with Chromium or Firefox. AIE uses the PyTorch framework to train and test image classifiers and connects to the Google Speech API (free) for speech processing. Library versions and dependencies are given in the requirements file. 
-AIE has been tested on a desktop (i7-4770 CPU with 16GB of memory) and a laptop (i7-3667 CPU with 8GB of memory) with Ubuntu (18.04 TLS under kernels 5.2.8 and 5.3.0) and Mac Os (Catalina) with images sourced from .mp4 and .webm video (HD [1920 x 1080] at 30f/s; .mp4  H.264 encoded) from multiple (android OS) mobile phones and GoPro Hero 6 action cameras.
+AIE runs on Linux under Python3 and Flask with Chromium or Firefox. AIE uses the PyTorch framework to train and test image classifiers and connects to the Google Speech API (free) for speech processing. Library versions and dependencies are given in the requirements file. 
+AIE has been tested on a desktop (i7-4770 CPU with 16GB of memory) and a laptop (i7-3667 CPU with 8GB of memory) with Ubuntu 18.04 TLS under kernels 5.2.8 and 5.3.0 with images sourced from .mp4 and .webm video (HD [1920 x 1080] at 30f/s; .mp4  H.264 encoded) from multiple (android OS) mobile phones and GoPro Hero 6 action cameras.
 
-
-<b>Browser Installation</b>
-
-Recommended browser: Chromium.
-
-Install Chromium on Ubuntu:
-
-	sudo apt install -y chromium-browser
-
-Install Chromium on Mac OS:
-
-	https://apple.stackexchange.com/questions/78805/chromium-builds-for-mac-os-x/215426#215426
-	(Currently recommended method)
-
+Recommended browser: Chromium. 
 Install the free Classic Cache Killer:
-
-	https://chrome.google.com/webstore/detail/classic-cache-killer/kkmknnnjliniefekpicbaaobdnjjikfp?hl=en 
+https://chrome.google.com/webstore/detail/classic-cache-killer/kkmknnnjliniefekpicbaaobdnjjikfp?hl=en 
 
 
 
@@ -79,39 +64,38 @@ Generate an STT key (optional)
 
 While there are multiple providers of Speech to Text services, the most effective offering with the widest range of languages is at this moment provided by Google. If you want to make use of the text from video extraction you should obtain an access key to the Google Speech API. Creation of this key is free of charge and you can use it in this software at no cost as AIE operates within free limits of the API. However, you do require a google account in order to create the key. If that is not palatable, skip the section that makes use of the Speech API.
 
-Instructions to generate a key (https://cloud.google.com/text-to-speech/docs/quickstart-protocol):
+Instructions to generate a key:
 
-    1. In the Cloud Console, go to the Create service account key page.
-    2. From the Service account list, select New service account.
-    3. In the Service account name field, enter a name.
-    4. Don't select a value from the Role list. No role is required to access this service.
-    5. Click Create. 
-    6. Click Create without role. A JSON file that contains your key downloads to your computer.
-    7. Save the JSON file to the AIE project.
+    1. Navigate to the APIs & Services->Credentials panel in Cloud Platform Console.
+    2. Select Create credentials, then select API key from the dropdown menu.
+    3. Click the Create button. ... 
+    4. Once you have the API key, download it and create a JSON file.
+    5. Save to the AIE project
 
 
-<b>Start AIE</b>
+<b>Launch AIE</b>
 
-(in the ai-ethnobotany directory): 
+Activate the virtual environment:		
 
-	python3 main.py ubuntu chromium no-debug
+	source ./env/bin/activate
+	
+Run the program:   
 
-Specify all three items: OS, browser and debug mode. Supported OS: Ubuntu and Mac OS. Supported browsers: Chromium and Firefox (less stable). To run in debug mode replace’ no-debug’ with ‘debug’. 
+	python3 main.py browser debug_mode
 
-The terminal window will display comments. You should see the launch screen in a browser window:
-AI in Ethnobotany
+browser = firefox or chromium; debug_mode = debug or no-debug. The terminal window will display comments. You should see the launch screen in a browser window.
 
+crtl +  /  ctrl – 	increase / decrease zoom factor.
 
-crtl + / ctrl – increase / decrease zoom factor.
-
-<b>Stop AIE </b>
-
-At terminal:					
+Stop the app from the terminal:					
 ctrl-c
 
+Exit environment at the terminal:				
+ctrl-d
+
 If you see browser errors .. clear the browsing history: 	
-ctrl-H, 
-clear browsing data,
+ctrl-H
+clear browsing data
 clear data
 
 <i>Check the README.pdf file in the repository for a detailed description on how to use the modules in AIE.</i>

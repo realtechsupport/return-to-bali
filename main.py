@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # main.py
-# AI in Ethnobotany
+# AI for Ethnobotany
 # spring 2020
 # tested on ubuntu 18 LTS, kernel 5.3.0
 #-------------------------------------------------------------------------------
@@ -30,7 +30,9 @@ from inputs import *
 from utilities import *
 from similarities import *
 from pyt_utilities import *
+from maps_sats import *
 
+#-------------------------------------------------------------------------------
 app = Flask(__name__, template_folder="templates")
 cwd = app.root_path
 
@@ -39,9 +41,9 @@ s_dir = cwd + '/static/';       i_dir = cwd + '/images/'
 m_dir = cwd + '/models/';       c_dir = cwd + '/collection/'
 r_dir = cwd + '/results/';      ar_dir = cwd + '/archive/'
 f_dir = cwd + '/find/';         cl_dir = cwd + '/classify/'
-te_dir = cwd + '/tests/'
+te_dir = cwd + '/tests/';       co_dir = cwd + '/context/'
 
-dirs = [t_dir, s_dir, i_dir, m_dir, c_dir, r_dir, ar_dir, f_dir, cl_dir, te_dir]
+dirs = [t_dir, s_dir, i_dir, m_dir, c_dir, r_dir, ar_dir, f_dir, cl_dir, te_dir, co_dir]
 for dir in dirs:
     if not os.path.exists(dir):
         os.makedirs(dir)
@@ -52,7 +54,7 @@ app.config['IMAGES'] = i_dir
 app.config['MODELS'] = m_dir;   app.config['COLLECTION'] = c_dir
 app.config['RESULTS'] = r_dir;  app.config['FIND'] = f_dir
 app.config['ARCHIVE'] = ar_dir; app.config['CLASSIFY'] = cl_dir
-app.config['TESTS'] = te_dir
+app.config['TESTS'] = te_dir;   app.config['CONTEXT'] = co_dir
 
 class Config(object):
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'you-will-never-guess'
@@ -560,6 +562,76 @@ def trainclassifiers():
 @app.route('/showinfoview')
 def showinfoview():
     template = 'showinfoview.html'
+    return render_template(template)
+
+#-------------------------------------------------------------------------------
+@app.route('/contextview', methods=['GET', 'POST'])
+def contextview():
+    template = 'contextview.html'
+    return render_template(template)
+
+#-------------------------------------------------------------------------------
+@app.route('/weathersatview', methods=['GET', 'POST'])
+def weathersatview():
+    sat_map = ''; weatherplot = ''; weathertable = ''
+    template = 'weathersatview.html'
+    satref_url = 'https://filedn.com/lqzjnYhpY3yQ7BdfTulG1yY/AIE_maps/'
+    weatherref_url = 'https://filedn.com/lqzjnYhpY3yQ7BdfTulG1yY/AIE_weather/BaliBotanicalGardenWeather_Ref.csv'
+    weathercurrent_url = 'https://filedn.com/lqzjnYhpY3yQ7BdfTulG1yY/AIE_weather/AIE_weather.csv'
+    weatherref_file = 'refweatherdata.csv'
+    weathercurrent_file = 'AIE_weather.csv'
+
+    wreftarget = os.path.join(app.config['CONTEXT'], weatherref_file)
+    wcurtarget = os.path.join(app.config['CONTEXT'], weathercurrent_file)
+
+    try:
+        #always get the current weather, overwrite the existing one
+        file = wget.download(weathercurrent_url, wcurtarget)
+        if os.path.exists(wcurtarget):
+                shutil.move(file, wcurtarget)
+        #get the reference data only once
+        path, dirs, files = next(os.walk(app.config['CONTEXT']))
+        if(weatherref_file in files):
+            print('already downloaded the weather data..')
+            pass
+        else:
+            wget.download(weatherref_url, wreftarget)
+
+    except:
+        'weatherdata download failed...'
+        pass
+
+    #now produce the reference image and current data, copy to static folder
+    weatherplot = create_weatherplot(wreftarget, wcurtarget)
+    weatherplotname = weatherplot.split('/')[-1]
+    destination = os.path.join(app.config['STATIC'], weatherplotname)
+    shutil.move(weatherplot, destination)
+
+    weathertable = create_weathertable(wcurtarget)
+    weathertablename = weathertable.split('/')[-1]
+    destination = os.path.join(app.config['STATIC'], weathertablename)
+    shutil.move(weathertable, destination)
+
+    #get the sat-map asset and move to static folder
+    task = loop.create_task(get_map_sat(app, satref_url))
+    satmap = loop.run_until_complete(task)
+
+    #add title to the image
+    title = 'Satellite image of field study site in Central Bali'
+    titlesize = 22; color = (255,255,255); titlelocation = (10,10)
+    add_title(satmap, title, titlesize)
+
+    #satmapname = sat_map.split('/')[-1]
+    satmapname = 'current_satmap.jpg'
+    destination = os.path.join(app.config['STATIC'], satmapname)
+    shutil.move(satmap, destination)
+
+    return render_template(template, weatherplot=weatherplotname, satmap=satmapname, weathertable=weathertablename)
+
+#-------------------------------------------------------------------------------
+@app.route('/plantsview', methods=['GET', 'POST'])
+def plantsview():
+    template = 'plantsview.html'
     return render_template(template)
 
 #-------------------------------------------------------------------------------
