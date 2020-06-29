@@ -55,7 +55,7 @@ async def get_map_sat(app, source_url):
                 f.write(image)
                 f.close()
                 print('\ngot latest map from pcloud: ', n_name)
-                
+
     return(n_name)
 loop = asyncio.get_event_loop()
 
