@@ -573,7 +573,7 @@ def contextview():
 #-------------------------------------------------------------------------------
 @app.route('/weathersatview', methods=['GET', 'POST'])
 def weathersatview():
-    sat_map = ''; weatherplot = ''
+    sat_map = ''; weatherplot = ''; weathertable = ''
     template = 'weathersatview.html'
     satref_url = 'https://filedn.com/lqzjnYhpY3yQ7BdfTulG1yY/AIE_maps/'
     weatherref_url = 'https://filedn.com/lqzjnYhpY3yQ7BdfTulG1yY/AIE_weather/BaliBotanicalGardenWeather_Ref.csv'
@@ -607,16 +607,26 @@ def weathersatview():
     destination = os.path.join(app.config['STATIC'], weatherplotname)
     shutil.move(weatherplot, destination)
 
+    weathertable = create_weathertable(wcurtarget)
+    weathertablename = weathertable.split('/')[-1]
+    destination = os.path.join(app.config['STATIC'], weathertablename)
+    shutil.move(weathertable, destination)
+
     #get the sat-map asset and move to static folder
     task = loop.create_task(get_map_sat(app, satref_url))
     satmap = loop.run_until_complete(task)
 
+    #add title to the image
+    title = 'Satellite image of field study site in Central Bali'
+    titlesize = 22; color = (255,255,255); titlelocation = (10,10)
+    add_title(satmap, title, titlesize)
+
     #satmapname = sat_map.split('/')[-1]
-    satmapname = 'current_satmap,jpg'
+    satmapname = 'current_satmap.jpg'
     destination = os.path.join(app.config['STATIC'], satmapname)
     shutil.move(satmap, destination)
 
-    return render_template(template, weatherplot=weatherplotname, satmap=satmapname)
+    return render_template(template, weatherplot=weatherplotname, satmap=satmapname, weathertable=weathertablename)
 
 #-------------------------------------------------------------------------------
 @app.route('/plantsview', methods=['GET', 'POST'])
