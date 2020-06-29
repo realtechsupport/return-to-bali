@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<title>weathersatview.html</title>
+
+<center>
+<h2>weather reference and update; satellite view of field site</h2>
+</center>
+
+<centerV3>
+<br>
+<img src="{{url_for('static', filename=weatherplot) }}" width="1000">
+
+<img src="{{url_for('static', filename=satmap) }}" width="300" >
+<img src="{{url_for('static', filename=weathertable) }}" width="450" >
+</centerV3>
+
+
+<br><br>
+<center>
+<a href="{{ url_for('index') }}"> back to start </a>
+</center>
+
+{% endblock %}
+</body>
+</html>
