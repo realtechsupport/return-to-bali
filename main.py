@@ -639,7 +639,8 @@ if __name__ == '__main__':
     if('ubuntu' in osy):
         threading.Timer(1.25, lambda: webbrowser.get(browser).open(url) ).start()
     else:
-        threading.Timer(1.25, lambda: webbrowser.get('open -a /Applications/Chromium.app %s').open(url)).start()
+        threading.Timer(1.25, lambda: webbrowser.get('open -a /Applications/Google\ Chrome.app %s').open(url)).start()
+
 
     if(debug_mode == 'debug'):
         socketio.run(app, port=port, debug=True)
