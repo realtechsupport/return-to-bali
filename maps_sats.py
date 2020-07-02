@@ -14,10 +14,8 @@ import aiohttp, asyncio
 
 #-------------------------------------------------------------------------------
 async def get_map_sat(app, source_url):
-    times = []
-    names = []
+    info = {}
     n_name = ''
-
     async with aiohttp.ClientSession() as session:
         #get the name of the latest map asset from the pCloud maps folder
         async with session.get(source_url) as resp:
@@ -37,13 +35,11 @@ async def get_map_sat(app, source_url):
                     n = script_s[t_names[i]:t_starts[i]]
                     ts = (t.split('"')[-1]).strip()
                     n = n.split('"')[2]
-                    times.append(ts)
-                    names.append(n)
+                    info.update({ts : n})
 
-                sorted_times = sorted(times)
-                newest = sorted_times[0]
-                ind = times.index(newest)
-                n_name = names[ind]
+                sorted_info = sorted(info.items(), key=lambda x:x[0])
+                n_name = sorted_info[0][1]
+                print('sat image time and name: ', sorted_info[0])
                 source_url2 = source_url + n_name
 
         #download that latest asset

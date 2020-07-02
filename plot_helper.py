@@ -7,14 +7,17 @@ import os, sys, glob
 from pyt_utilities import *
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
+import matplotlib.dates as mdt
+from matplotlib.pyplot import cm
 import numpy
 import pandas
+pandas.set_option('display.max_columns', 50)
+pandas.set_option('display.width', 1000)
 from PIL import Image
 from PIL import ImageFont
 from PIL import ImageDraw
-pandas.set_option('display.max_columns', 50)
-pandas.set_option('display.width', 1000)
 import csv
+from datetime import datetime
 
 #-------------------------------------------------------------------------------
 def plot_training(e_val_loss, e_train_loss, e_val_acc, e_train_acc, training_image):
@@ -79,32 +82,7 @@ def autolabel(bars, ax, fs):
         ax.text(rect.get_x() + rect.get_width()/2., 0.9*height,'%d' % int(height),ha='center', va='bottom', fontsize=fs)
 
 #-------------------------------------------------------------------------------
-def create_weatherplot(referenceweatherdatafile, currentweatherdatafile):
-    #open the file and read in the current weatherdata..
-    results = []
-    with open(currentweatherdatafile, newline='\r\n') as csvfile:
-        data = csv.reader(csvfile, delimiter=',')
-        for row in data:
-            results.append(row)
-
-    for item in results:
-        if('localtime' in item[0]):
-            newdate = item[1]
-        elif('rainfall' in item[0]):
-            nrain = float(item[1])
-        elif('current_temperature' in item[0]):
-            ntemp = float(item[1])
-
-    #map month and day onto the reference data (2018-2019)
-    newdate = newdate.split('_')[0]
-    month = newdate.split('-')[1]
-    day =  newdate.split('-')[2]
-    if((int(month) >= 12) and (int(month) <= 12)):
-        year = '2018'
-    else:
-        year = '2019'
-    ndate = year + '-' + month + '-' + day
-
+def create_weatherplot(referenceweatherdatafile, currentweatherdatafile, destination_folder, add_current_data):
 
     dataset = pandas.read_csv(referenceweatherdatafile, low_memory=False)
     #get rid of the row below the header
@@ -114,51 +92,167 @@ def create_weatherplot(referenceweatherdatafile, currentweatherdatafile):
     dataset = dataset.sort_values(by='Date+Time',ascending=True)
     dataset.drop_duplicates(subset='Date+Time', keep=False, inplace=True)
     #print(dataset.head(10))#print(dataset.tail(10))
-    #---------------------------------------------------------------------------
 
     fig, ax1 = plt.subplots(figsize=(24,8))
     ax1.set_facecolor('whitesmoke')
     ax1.scatter(dataset['Dates_only'], dataset['maxtemp'],  marker='o', s=5.0, alpha = 0.3, linewidths=None, edgecolors = 'none', c='r')
     ax1.scatter(dataset['Dates_only'], dataset['mintemp'],  marker='o', s=5.0, alpha = 0.2, linewidths=None, edgecolors = 'none', c='b')
-    '''
-    titletext = 'Bali Botanical Garden Research Station Climate Reference Year [Dec 2018 to Dec 2019]\n min, max temperature (blue and red) ' + \
-    ' and rainfall (green) \n red and green circles are current [' + month + '-' + day + ']' \
-    ' temperature and rain data from a local weather station in Ubud, Bali mapped onto the reference chart below'
-    '''
-    titletext = 'Temperature and rain fail typical of Central Bali (data from the Bali Botanical Garden, year 2018-2019) \n  ' + \
-    ' current data from Ubud added with red and green circles'
-
-    ax1.set_title(titletext, fontdict={'fontsize': 18, 'fontweight': 'medium'})
-    #ax1.set(xlabel = 'Date', ylabel = 'Temp [C]', title = titletext)
-    ax1.set_ylabel('Temp [C]', fontsize = 16)
-    ax1.tick_params(axis='x', labelrotation=60)
-    ttl = ax1.title
-    ttl.set_position([.5, 1.05])
 
     ax2 = ax1.twinx()
     ax2.scatter(dataset['Dates_only'], dataset['rain'],  marker='o', s=5.0, alpha=1.0, linewidths=None, c='g')
     ax2.set_ylabel('Rain [mm]', fontsize = 16)
     ax2.xaxis.set_major_locator(plt.MaxNLocator(20))
 
+    if(add_current_data == True):
+        results = []
+        with open(currentweatherdatafile, newline='\r\n') as csvfile:
+            data = csv.reader(csvfile, delimiter=',')
+            for row in data:
+                results.append(row)
+
+        for item in results:
+            if('localtime' in item[0]):
+                newdate = item[1]
+            elif('rainfall' in item[0]):
+                nrain = float(item[1])
+            elif('current_temperature' in item[0]):
+                ntemp = float(item[1])
+
+        #map month and day onto the reference data (2018-2019)
+        newdate = newdate.split('_')[0]
+        month = newdate.split('-')[1]
+        day =  newdate.split('-')[2]
+        if((int(month) >= 12) and (int(month) <= 12)):
+            year = '2018'
+        else:
+            year = '2019'
+        ndate = year + '-' + month + '-' + day
+
+        titletext = 'Temperature and rain fail typical of Central Bali (data from the Bali Botanical Garden, year 2018-2019) \n  ' + \
+        ' current data from Ubud added with red and green circles'
+
+        weatherplot = referenceweatherdatafile.split('.csv')[0] + '_currentdata.jpg'
+
+        plt.sca(ax1)
+        ax1.scatter(ndate, ntemp, marker='o', s=150, alpha = 1.0, color='darkred', edgecolors='darkred', linewidth=2.0)
+        plt.annotate(str(ntemp), (ndate, ntemp), textcoords='offset points', color = 'k', xytext=(0,10), ha='center', size=14)
+
+        plt.sca(ax2)
+        ax2.scatter(ndate, nrain, marker='o', s=150, alpha = 1.0, color='darkgreen', edgecolors='darkgreen', linewidth=2.0)
+        plt.annotate(str(nrain), (ndate, nrain), textcoords='offset points', color = 'k', xytext=(0,10), ha='center', size=14)
+
+    else:
+        titletext = 'Temperature and rain fail typical of Central Bali (data from the Bali Botanical Garden, year 2018-2019)'
+        weatherplot = referenceweatherdatafile.split('.csv')[0] + '.jpg'
+
+
+    ax1.set_title(titletext, fontdict={'fontsize': 18, 'fontweight': 'medium'})
+    ax1.set_ylabel('Temp [C]', fontsize = 16)
+    ax1.tick_params(axis='x', labelrotation=60)
+    ttl = ax1.title
+    ttl.set_position([.5, 1.05])
+
     plt.xticks(ha='right')
     fig.subplots_adjust(top=0.85)
     fig.subplots_adjust(bottom=0.2)
 
-    plt.sca(ax1)
-    ax1.scatter(ndate, ntemp, marker='o', s=150, alpha = 1.0, color='darkred', edgecolors='darkred', linewidth=2.0)
-    plt.annotate(str(ntemp), (ndate, ntemp), textcoords='offset points', color = 'k', xytext=(0,10), ha='center', size=14)
+    weatherplotname = weatherplot.split('/')[-1]
+    destination = os.path.join(destination_folder, weatherplotname)
+    plt.savefig(destination)
 
-    plt.sca(ax2)
-    ax2.scatter(ndate, nrain, marker='o', s=150, alpha = 1.0, color='darkgreen', edgecolors='darkgreen', linewidth=2.0)
-    plt.annotate(str(nrain), (ndate, nrain), textcoords='offset points', color = 'k', xytext=(0,10), ha='center', size=14)
-
-    weatherplot = referenceweatherdatafile.split('.csv')[0] + '.jpg'
-    plt.savefig(weatherplot)
-
-    return(weatherplot)
+    return(weatherplotname)
 
 #-------------------------------------------------------------------------------
-def create_weathertable(currentweatherdatafile):
+
+def create_weather_flora_events_plot(referenceweatherdatafile, seasonsdatafilepath, festivalsdatafilepath, destination_folder):
+
+    #weather
+    dataset = pandas.read_csv(referenceweatherdatafile, low_memory=False)
+    #get rid of the row below the header
+    dataset.drop(dataset.index[[0,1]], inplace = True)
+    dataset['Date+Time'] = dataset['Dates_only'].astype(str) + ' ' + dataset['Time'].astype(str)
+    dataset['Date+Time'] = pandas.to_datetime(dataset['Date+Time'])
+    dataset = dataset.sort_values(by='Date+Time',ascending=True)
+    dataset.drop_duplicates(subset='Date+Time', keep=False, inplace=True)
+
+    #events
+    fdataset = pandas.read_csv(festivalsdatafilepath, low_memory=False)
+    print(fdataset)
+    fdataset['start'] = pandas.to_datetime(fdataset['start'])
+    fdataset['end'] = pandas.to_datetime(fdataset['end'])
+
+    print()
+    #seasons
+    sdataset = pandas.read_csv(seasonsdatafilepath, low_memory=False)
+    sdataset = (sdataset.filter( ['plant', 'fruiting_start', 'fruiting_end'])).dropna()
+    print(sdataset)
+    sdataset['fruiting_start'] = pandas.to_datetime(sdataset['fruiting_start'])
+    sdataset['fruiting_end'] = pandas.to_datetime(sdataset['fruiting_end'])
+
+
+    #PLOTS --------------------------------------------------------------------
+
+    fig, (ax1, ax2, ax3) = plt.subplots(3, figsize=(24,24))
+    #ax1 - weather
+    ax1.set_facecolor('whitesmoke')
+    ax1.scatter(dataset['Dates_only'], dataset['maxtemp'],  marker='o', s=5.0, alpha = 0.3, linewidths=None, edgecolors = 'none', c='r')
+    ax1.scatter(dataset['Dates_only'], dataset['mintemp'],  marker='o', s=5.0, alpha = 0.2, linewidths=None, edgecolors = 'none', c='b')
+    ax1.tick_params(axis='both', which='major', labelsize=16)
+
+
+    ax4 = ax1.twinx()
+    ax4.scatter(dataset['Dates_only'], dataset['rain'],  marker='o', s=5.0, alpha=1.0, linewidths=None, c='g')
+    ax4.set_ylabel('Rain [mm]', fontsize = 18)
+    ax4.tick_params(axis='both', which='major', labelsize=16)
+    ax4.xaxis.set_major_locator(plt.MaxNLocator(20))
+
+    titletext = 'Temperature and rain fail typical of Central Bali (data from the Bali Botanical Garden, year 2018-2019)'
+    ax1.set_title(titletext, fontdict={'fontsize': 18, 'fontweight': 'medium'})
+    ax1.set_ylabel('Temp [C]', fontsize = 18)
+    ax1.tick_params(axis='x', labelrotation=60)
+    ttl = ax1.title
+    ttl.set_position([.5, 1.05])
+
+    #ax2 - events
+    # color changes on hlines
+    #https://www.programcreek.com/python/example/102287/matplotlib.pyplot.hlines - example 9
+    #https://matplotlib.org/tutorials/colors/colormaps.html
+    #https://jakevdp.github.io/PythonDataScienceHandbook/04.07-customizing-colorbars.html
+    ax2.set_facecolor('whitesmoke')
+    ax2.hlines(fdataset['event'],fdataset['start'], fdataset['end'], linewidth=10, color = 'gray')
+    ax2.tick_params(axis='x', labelrotation=60)
+    ax2.grid()
+    ax2.tick_params(axis='both', which='major', labelsize=16)
+
+    #ax3 - seasons
+    ax3.set_facecolor('whitesmoke')
+    #ax3.hlines(sdataset['plant'],sdataset['fruiting_start'], sdataset['fruiting_end'], linewidth=5, color = 'gray')
+    index = sdataset.index
+    n = len(index)
+    colors = cm.rainbow(n)
+    print (colors)
+
+    ax3.hlines(sdataset['plant'],sdataset['fruiting_start'], sdataset['fruiting_end'], linewidth=5, color=colors)  #cmap = 'gray'
+    ax3.tick_params(axis='x', labelrotation=60)
+    ax3.grid()
+    ax3.tick_params(axis='both', which='major', labelsize=16)
+
+
+    plt.xticks(ha='right')
+    fig.subplots_adjust(top=0.85)
+    fig.subplots_adjust(bottom=0.2)
+    fig.tight_layout()
+
+    weatherplot = referenceweatherdatafile.split('.csv')[0] + '.jpg'
+    weatherplotname = weatherplot.split('/')[-1]
+    destination = os.path.join(destination_folder, weatherplotname)
+
+    plt.savefig(destination)
+
+    return(weatherplotname)
+
+#-------------------------------------------------------------------------------
+def create_weathertable(currentweatherdatafile, destination_folder):
 
     data = pandas.read_csv(currentweatherdatafile, header=None)
     data.drop(data.tail(1).index,inplace=True)
@@ -167,7 +261,6 @@ def create_weathertable(currentweatherdatafile):
 
     fig, ax = plt.subplots(figsize=(8,6))
     fig.patch.set_visible(False)
-
 
     titletext = 'Latest weather in Ubud, Bali (30km from the Central Bali field site)'
     ax.set_title(titletext, fontdict={'fontsize': 12, 'fontweight': 'medium'})
@@ -184,13 +277,15 @@ def create_weathertable(currentweatherdatafile):
 
     ax.axis('off')
     ax.axis('tight')
-    plt.savefig(weathertable)
 
-    return(weathertable)
+    weathertablename = weathertable.split('/')[-1]
+    destination = os.path.join(destination_folder, weathertablename)
+    plt.savefig(destination)
+
+    return(weathertablename)
 
 #-------------------------------------------------------------------------------
-def add_title(imagepath, title, titlesize):
-
+def add_title(imagepath, satmapname, title, titlesize, destination_folder):
     img = mpimg.imread(imagepath)
     fig, ax = plt.subplots(figsize=(10,10))
     fig.patch.set_visible(False)
@@ -199,8 +294,8 @@ def add_title(imagepath, title, titlesize):
     tt = ax.title
     tt.set_position([0.5, 1.05])
     plt.axis('off')
-    plt.savefig(imagepath)
 
-#-------------------------------------------------------------------------------
+    destination = os.path.join(destination_folder, satmapname)
+    plt.savefig(destination)
 
 #-------------------------------------------------------------------------------

@@ -14,8 +14,6 @@
 
 # issue: can not get flask-caching to work properly
 # solution: Classic Cache Killer for Chrome; after install check options (right click, enable at start)
-
-
 #------------------------------------------------------------------------------
 import sys, os, time, shutil, glob
 import eventlet, json
@@ -31,6 +29,13 @@ from utilities import *
 from similarities import *
 from pyt_utilities import *
 from maps_sats import *
+#-------------------------------------------------------------------------------
+
+satref_url = 'https://filedn.com/lqzjnYhpY3yQ7BdfTulG1yY/AIE_maps/'
+weatherref_url = 'https://filedn.com/lqzjnYhpY3yQ7BdfTulG1yY/AIE_weather/BaliBotanicalGardenWeather_Ref.csv'
+weathercurrent_url = 'https://filedn.com/lqzjnYhpY3yQ7BdfTulG1yY/AIE_weather/AIE_weather.csv'
+weatherref_file = 'refweatherdata.csv'
+weathercurrent_file = 'AIE_weather.csv'
 
 #-------------------------------------------------------------------------------
 app = Flask(__name__, template_folder="templates")
@@ -393,6 +398,9 @@ def testclassifiers():
         print('test collection is: ', testcollection)
         location = os.path.join(app.config['FIND'], testcollection)
         zfile = os.path.join(app.config['FIND'], testcollection) + '.zip'
+
+        # -------------------------------------
+        # move section to utilities
         try:
             path, dirs, files = next(os.walk(location))
         except:
@@ -409,6 +417,7 @@ def testclassifiers():
                 #here other archives
                 archive = bali26_samples_zip
 
+        #----------------------------------
         images = os.listdir(location)
 
         if("display" in request.form):
@@ -498,6 +507,10 @@ def trainclassifiers():
             training_percentage = form.training_percentage.data;
             pretrained = form.pretrained.data; normalization = form.normalization.data;
 
+            #-----------
+            #location = app.config['FIND']
+            #prepare_collection(testcollection, location)
+
             try:
                 print('deleting the existing collection...')
                 shutil.rmtree(os.path.join(app.config['FIND'], testcollection))
@@ -531,6 +544,8 @@ def trainclassifiers():
                     exit()
 
             shutil.unpack_archive(zfile, app.config['FIND'], 'zip')
+            #------------
+
             path, categories, files = next(os.walk(os.path.join(app.config['FIND'], testcollection)))
 
             if(network == 'vanillanet'):
@@ -568,6 +583,8 @@ def showinfoview():
 @app.route('/contextview', methods=['GET', 'POST'])
 def contextview():
     template = 'contextview.html'
+
+
     return render_template(template)
 
 #-------------------------------------------------------------------------------
@@ -575,64 +592,51 @@ def contextview():
 def weathersatview():
     sat_map = ''; weatherplot = ''; weathertable = ''
     template = 'weathersatview.html'
-    satref_url = 'https://filedn.com/lqzjnYhpY3yQ7BdfTulG1yY/AIE_maps/'
-    weatherref_url = 'https://filedn.com/lqzjnYhpY3yQ7BdfTulG1yY/AIE_weather/BaliBotanicalGardenWeather_Ref.csv'
-    weathercurrent_url = 'https://filedn.com/lqzjnYhpY3yQ7BdfTulG1yY/AIE_weather/AIE_weather.csv'
-    weatherref_file = 'refweatherdata.csv'
-    weathercurrent_file = 'AIE_weather.csv'
 
     wreftarget = os.path.join(app.config['CONTEXT'], weatherref_file)
     wcurtarget = os.path.join(app.config['CONTEXT'], weathercurrent_file)
 
-    try:
-        #always get the current weather, overwrite the existing one
-        file = wget.download(weathercurrent_url, wcurtarget)
-        if os.path.exists(wcurtarget):
-                shutil.move(file, wcurtarget)
-        #get the reference data only once
-        path, dirs, files = next(os.walk(app.config['CONTEXT']))
-        if(weatherref_file in files):
-            print('already downloaded the weather data..')
-            pass
-        else:
-            wget.download(weatherref_url, wreftarget)
-
-    except:
-        'weatherdata download failed...'
-        pass
+    download_check(weathercurrent_url, weatherref_url, weatherref_file, wcurtarget, app.config['CONTEXT'], wreftarget)
 
     #now produce the reference image and current data, copy to static folder
-    weatherplot = create_weatherplot(wreftarget, wcurtarget)
-    weatherplotname = weatherplot.split('/')[-1]
-    destination = os.path.join(app.config['STATIC'], weatherplotname)
-    shutil.move(weatherplot, destination)
+    dest_folder = app.config['STATIC']
 
-    weathertable = create_weathertable(wcurtarget)
-    weathertablename = weathertable.split('/')[-1]
-    destination = os.path.join(app.config['STATIC'], weathertablename)
-    shutil.move(weathertable, destination)
+    weatherplotname = create_weatherplot(wreftarget, wcurtarget, dest_folder, add_current_data = True)
+    weathertablename = create_weathertable(wcurtarget, dest_folder)
 
-    #get the sat-map asset and move to static folder
+    #get the sat-map asset and move to static folder; add title
     task = loop.create_task(get_map_sat(app, satref_url))
     satmap = loop.run_until_complete(task)
 
-    #add title to the image
     title = 'Satellite image of field study site in Central Bali'
     titlesize = 22; color = (255,255,255); titlelocation = (10,10)
-    add_title(satmap, title, titlesize)
-
-    #satmapname = sat_map.split('/')[-1]
     satmapname = 'current_satmap.jpg'
-    destination = os.path.join(app.config['STATIC'], satmapname)
-    shutil.move(satmap, destination)
+    add_title(satmap, satmapname, title, titlesize, dest_folder)
 
     return render_template(template, weatherplot=weatherplotname, satmap=satmapname, weathertable=weathertablename)
 
 #-------------------------------------------------------------------------------
-@app.route('/plantsview', methods=['GET', 'POST'])
-def plantsview():
-    template = 'plantsview.html'
-    return render_template(template)
+@app.route('/floraclimateview', methods=['GET', 'POST'])
+def floraclimateview():
+    template = 'floraclimateview.html'
+    weatherplot = '';
+    wreftarget = os.path.join(app.config['CONTEXT'], weatherref_file)
+    wcurtarget = os.path.join(app.config['CONTEXT'], weathercurrent_file)
+
+    download_check(weathercurrent_url, weatherref_url, weatherref_file, wcurtarget, app.config['CONTEXT'], wreftarget)
+    dest_folder = app.config['STATIC']
+    festivalsdatafile = 'events.csv'
+    seasonsdatafile = 'seasons.csv'
+    festivalsdatafilepath = os.path.join(app.config['CONTEXT'], festivalsdatafile)
+    seasonsdatafilepath = os.path.join(app.config['CONTEXT'], seasonsdatafile)
+    weathereventsfloraname = create_weather_flora_events_plot(wreftarget, seasonsdatafilepath, festivalsdatafilepath, dest_folder)
+
+
+
+
+
+
+    return render_template(template, multiplot=weathereventsfloraname)
 
 #-------------------------------------------------------------------------------
 @app.route('/prepareview', methods=['GET', 'POST'])
@@ -684,7 +688,7 @@ if __name__ == '__main__':
     if(len(sys.argv) < 3):
         print('\nplease provide OS, browser and dubug choice when you start the program.')
         print('\'python3 main.py ubuntu firefox debug\', or \'python3 main.py mac chromium no-debug\' for example.\n')
-        print('OS: ubuntu or mac. Browsers: chromium or firefox.\n')
+        print('OS: Ubuntu or MAC. Ubuntu browsers: chromium or firefox; MAC only chrome: \'python3 main.py mac chrome no-debug\' \n')
         sys.exit(2)
     else:
         try:
@@ -702,6 +706,8 @@ if __name__ == '__main__':
 
     port = 5000
     url = "http://127.0.0.1:{0}".format(port)
+
+    #Two browsers supported in ubuntu; only one (Chrome) in MAC OS
     if('firefox' in browser):
         browser = 'firefox'
     else:
@@ -711,8 +717,8 @@ if __name__ == '__main__':
     if('ubuntu' in osy):
         threading.Timer(1.25, lambda: webbrowser.get(browser).open(url) ).start()
     else:
+        #launch Chrome on MAC OS
         threading.Timer(1.25, lambda: webbrowser.get('open -a /Applications/Google\ Chrome.app %s').open(url)).start()
-
 
     if(debug_mode == 'debug'):
         socketio.run(app, port=port, debug=True)
