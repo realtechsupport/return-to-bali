@@ -18,6 +18,7 @@ from PIL import ImageFont
 from PIL import ImageDraw
 import csv
 from datetime import datetime
+from datetime import date
 
 #-------------------------------------------------------------------------------
 def plot_training(e_val_loss, e_train_loss, e_val_acc, e_train_acc, training_image):
@@ -91,7 +92,9 @@ def create_weatherplot(referenceweatherdatafile, currentweatherdatafile, destina
     dataset['Date+Time'] = pandas.to_datetime(dataset['Date+Time'])
     dataset = dataset.sort_values(by='Date+Time',ascending=True)
     dataset.drop_duplicates(subset='Date+Time', keep=False, inplace=True)
-    #print(dataset.head(10))#print(dataset.tail(10))
+    #print(dataset.head(10))
+    print(dataset['Dates_only'].tail(10))
+    print(dataset['Date+Time'].tail(10))
 
     fig, ax1 = plt.subplots(figsize=(24,8))
     ax1.set_facecolor('whitesmoke')
@@ -119,17 +122,20 @@ def create_weatherplot(referenceweatherdatafile, currentweatherdatafile, destina
                 ntemp = float(item[1])
 
         #map month and day onto the reference data (2018-2019)
-        newdate = newdate.split('_')[0]
-        month = newdate.split('-')[1]
-        day =  newdate.split('-')[2]
-        if((int(month) >= 12) and (int(month) <= 12)):
+        newdate = newdate.split('_')[0].strip()
+        month = newdate.split('-')[1].strip()
+        day =  newdate.split('-')[2].strip()
+
+        if((int(month) >= 12) and (int(month) < 12)):
             year = '2018'
         else:
             year = '2019'
+
         ndate = year + '-' + month + '-' + day
+        #print('\nchecking localtime, mapped time: ', newdate, ndate)
 
         titletext = 'Temperature and rain fail typical of Central Bali (data from the Bali Botanical Garden, year 2018-2019) \n  ' + \
-        ' current data from Ubud added with red and green circles'
+        ' current data from local weather station in Ubud added with red and green circles'
 
         weatherplot = referenceweatherdatafile.split('.csv')[0] + '_currentdata.jpg'
 
@@ -177,28 +183,28 @@ def create_weather_flora_events_plot(referenceweatherdatafile, seasonsdatafilepa
 
     #events
     fdataset = pandas.read_csv(festivalsdatafilepath, low_memory=False)
-    print(fdataset)
     fdataset['start'] = pandas.to_datetime(fdataset['start'])
     fdataset['end'] = pandas.to_datetime(fdataset['end'])
 
-    print()
     #seasons
     sdataset = pandas.read_csv(seasonsdatafilepath, low_memory=False)
     sdataset = (sdataset.filter( ['plant', 'fruiting_start', 'fruiting_end'])).dropna()
-    print(sdataset)
     sdataset['fruiting_start'] = pandas.to_datetime(sdataset['fruiting_start'])
     sdataset['fruiting_end'] = pandas.to_datetime(sdataset['fruiting_end'])
-
 
     #PLOTS --------------------------------------------------------------------
 
     fig, (ax1, ax2, ax3) = plt.subplots(3, figsize=(24,24))
+
     #ax1 - weather
     ax1.set_facecolor('whitesmoke')
     ax1.scatter(dataset['Dates_only'], dataset['maxtemp'],  marker='o', s=5.0, alpha = 0.3, linewidths=None, edgecolors = 'none', c='r')
     ax1.scatter(dataset['Dates_only'], dataset['mintemp'],  marker='o', s=5.0, alpha = 0.2, linewidths=None, edgecolors = 'none', c='b')
     ax1.tick_params(axis='both', which='major', labelsize=16)
 
+    #ax1.xaxis.set_major_locator(mdt.DayLocator())
+    #ax1.xaxis.set_major_formatter(mdt.DateFormatter('%M-%d'))
+    #ax1.set_xlim(dataset['Dates_only'].values[0], dataset['Dates_only'].values[-1])
 
     ax4 = ax1.twinx()
     ax4.scatter(dataset['Dates_only'], dataset['rain'],  marker='o', s=5.0, alpha=1.0, linewidths=None, c='g')
@@ -206,50 +212,69 @@ def create_weather_flora_events_plot(referenceweatherdatafile, seasonsdatafilepa
     ax4.tick_params(axis='both', which='major', labelsize=16)
     ax4.xaxis.set_major_locator(plt.MaxNLocator(20))
 
-    titletext = 'Temperature and rain fail typical of Central Bali (data from the Bali Botanical Garden, year 2018-2019)'
+    titletext = 'Temperature and rain fail Central Bali 2018-2019 (Bali Botanical Gardens)'
     ax1.set_title(titletext, fontdict={'fontsize': 18, 'fontweight': 'medium'})
     ax1.set_ylabel('Temp [C]', fontsize = 18)
     ax1.tick_params(axis='x', labelrotation=60)
     ttl = ax1.title
     ttl.set_position([.5, 1.05])
 
-    #ax2 - events
-    # color changes on hlines
-    #https://www.programcreek.com/python/example/102287/matplotlib.pyplot.hlines - example 9
-    #https://matplotlib.org/tutorials/colors/colormaps.html
-    #https://jakevdp.github.io/PythonDataScienceHandbook/04.07-customizing-colorbars.html
+    #ax2 - events -------------------------------------------------------------
     ax2.set_facecolor('whitesmoke')
-    ax2.hlines(fdataset['event'],fdataset['start'], fdataset['end'], linewidth=10, color = 'gray')
+    index = fdataset.index
+    n = len(index)
+    for i in range(0, n-1):
+        diff =  fdataset['end'][i] - fdataset['start'][i]
+        diff = diff / numpy.timedelta64(1,'M')
+
+        if(diff < 1):
+            lw = 25
+            c = 'black'
+        else:
+            lw = 8
+            c = 'gray'
+
+        ax2.hlines(fdataset['event'][i],fdataset['start'][i], fdataset['end'][i], linewidth=lw, color = c)
+
     ax2.tick_params(axis='x', labelrotation=60)
     ax2.grid()
     ax2.tick_params(axis='both', which='major', labelsize=16)
+    ax2.set_xlim([date(2018, 11, 15), date(2019, 12, 31)])
+    titletext = 'Religious events in Bali 2018-2019'
+    ax2.set_title(titletext, fontdict={'fontsize': 18, 'fontweight': 'medium'})
+    ttl = ax2.title
+    ttl.set_position([.5, 1.05])
 
-    #ax3 - seasons
+
+    #ax3 - seasons -------------------------------------------------------------
     ax3.set_facecolor('whitesmoke')
-    #ax3.hlines(sdataset['plant'],sdataset['fruiting_start'], sdataset['fruiting_end'], linewidth=5, color = 'gray')
-    index = sdataset.index
-    n = len(index)
-    colors = cm.rainbow(n)
-    print (colors)
-
-    ax3.hlines(sdataset['plant'],sdataset['fruiting_start'], sdataset['fruiting_end'], linewidth=5, color=colors)  #cmap = 'gray'
+    ax3.hlines(sdataset['plant'],sdataset['fruiting_start'], sdataset['fruiting_end'], linewidth=5, color='gray')
     ax3.tick_params(axis='x', labelrotation=60)
     ax3.grid()
     ax3.tick_params(axis='both', which='major', labelsize=16)
+    ax3.set_xlim([date(2018, 11, 15), date(2019, 12, 31)])
+    titletext = 'Flowering seasons of the plants in the bali-26 dataset'
+    ax3.set_title(titletext, fontdict={'fontsize': 18, 'fontweight': 'medium'})
+    ttl = ax3.title
+    ttl.set_position([.5, 1.05])
 
+    months = mdt.MonthLocator()
+    ax2.xaxis.set_major_locator(months)
+    ax3.xaxis.set_major_locator(months)
 
+    #fig.autofmt_xdate()
     plt.xticks(ha='right')
     fig.subplots_adjust(top=0.85)
     fig.subplots_adjust(bottom=0.2)
-    fig.tight_layout()
+    fig.tight_layout(pad=5.0)
 
-    weatherplot = referenceweatherdatafile.split('.csv')[0] + '.jpg'
-    weatherplotname = weatherplot.split('/')[-1]
-    destination = os.path.join(destination_folder, weatherplotname)
+    weathereventseasonsplot = referenceweatherdatafile.split('.csv')[0] + '.jpg'
+    weathereventseasonsplotname = weathereventseasonsplot.split('/')[-1]
+    destination = os.path.join(destination_folder, weathereventseasonsplotname)
 
     plt.savefig(destination)
 
-    return(weatherplotname)
+    return(weathereventseasonsplotname)
 
 #-------------------------------------------------------------------------------
 def create_weathertable(currentweatherdatafile, destination_folder):
