@@ -34,6 +34,8 @@ from maps_sats import *
 satref_url = 'https://filedn.com/lqzjnYhpY3yQ7BdfTulG1yY/AIE_maps/'
 weatherref_url = 'https://filedn.com/lqzjnYhpY3yQ7BdfTulG1yY/AIE_weather/BaliBotanicalGardenWeather_Ref.csv'
 weathercurrent_url = 'https://filedn.com/lqzjnYhpY3yQ7BdfTulG1yY/AIE_weather/AIE_weather.csv'
+seasons_url = 'https://filedn.com/lqzjnYhpY3yQ7BdfTulG1yY/AIE_context/seasons.csv'
+events_url = 'https://filedn.com/lqzjnYhpY3yQ7BdfTulG1yY/AIE_context/events.csv'
 weatherref_file = 'refweatherdata.csv'
 weathercurrent_file = 'AIE_weather.csv'
 
@@ -593,14 +595,14 @@ def weathersatview():
     sat_map = ''; weatherplot = ''; weathertable = ''
     template = 'weathersatview.html'
 
-    wreftarget = os.path.join(app.config['CONTEXT'], weatherref_file)
-    wcurtarget = os.path.join(app.config['CONTEXT'], weathercurrent_file)
+    location = app.config['CONTEXT']
+    dest_folder = app.config['STATIC']
+    wreftarget = os.path.join(location, weatherref_file)
+    wcurtarget = os.path.join(location, weathercurrent_file)
 
-    download_check(weathercurrent_url, weatherref_url, weatherref_file, wcurtarget, app.config['CONTEXT'], wreftarget)
+    downloadweather_check(weathercurrent_url, weatherref_url, weatherref_file, wcurtarget, location, wreftarget)
 
     #now produce the reference image and current data, copy to static folder
-    dest_folder = app.config['STATIC']
-
     weatherplotname = create_weatherplot(wreftarget, wcurtarget, dest_folder, add_current_data = True)
     weathertablename = create_weathertable(wcurtarget, dest_folder)
 
@@ -619,22 +621,23 @@ def weathersatview():
 @app.route('/floraclimateview', methods=['GET', 'POST'])
 def floraclimateview():
     template = 'floraclimateview.html'
-    weatherplot = '';
-    wreftarget = os.path.join(app.config['CONTEXT'], weatherref_file)
-    wcurtarget = os.path.join(app.config['CONTEXT'], weathercurrent_file)
+    weathereventsfloraname = '';
 
-    download_check(weathercurrent_url, weatherref_url, weatherref_file, wcurtarget, app.config['CONTEXT'], wreftarget)
+    location = app.config['CONTEXT']
     dest_folder = app.config['STATIC']
-    festivalsdatafile = 'events.csv'
-    seasonsdatafile = 'seasons.csv'
-    festivalsdatafilepath = os.path.join(app.config['CONTEXT'], festivalsdatafile)
-    seasonsdatafilepath = os.path.join(app.config['CONTEXT'], seasonsdatafile)
+    seasons = seasons_url.split('/')[-1]
+    festivals = events_url.split('/')[-1]
+
+    wreftarget = os.path.join(location, weatherref_file)
+    wcurtarget = os.path.join(location, weathercurrent_file)
+
+    downloadweather_check(weathercurrent_url, weatherref_url, weatherref_file, wcurtarget, location, wreftarget)
+    downloadassets_check(seasons_url, location, seasons)
+    downloadassets_check(events_url, location, festivals)
+
+    festivalsdatafilepath = os.path.join(location, festivals)
+    seasonsdatafilepath = os.path.join(location, seasons)
     weathereventsfloraname = create_weather_flora_events_plot(wreftarget, seasonsdatafilepath, festivalsdatafilepath, dest_folder)
-
-
-
-
-
 
     return render_template(template, multiplot=weathereventsfloraname)
 

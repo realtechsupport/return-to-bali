@@ -96,7 +96,7 @@ def rename_all(source, offset):
         os.rename(tsrc, dst)
 
 #-------------------------------------------------------------------------------
-def download_check(currenturl, referenceurl, referencefile, target, location, targetfile):
+def downloadweather_check(currenturl, referenceurl, referencefile, target, location, targetfile):
     try:
         file = wget.download(currenturl, target)
         if os.path.exists(target):
@@ -104,10 +104,27 @@ def download_check(currenturl, referenceurl, referencefile, target, location, ta
         #get the reference data only once
         path, dirs, files = next(os.walk(location))
         if(referencefile in files):
-            print('already downloaded the data..')
+            print('\nalready downloaded the data..\n')
             pass
         else:
             wget.download(referenceurl, targetfile)
+
+    except:
+        'data download failed...'
+        pass
+
+#-------------------------------------------------------------------------------
+def downloadassets_check(current_url, location, filename):
+
+    targetfile = os.path.join(location, filename)
+    #print('\nInside download assets ..', filename, targetfile)
+    try:
+        path, dirs, files = next(os.walk(location))
+        if(filename in files):
+            print('\nalready downloaded the data..\n')
+            pass
+        else:
+            wget.download(current_url, targetfile)
 
     except:
         'data download failed...'
