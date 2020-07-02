@@ -30,6 +30,7 @@ from similarities import *
 from pyt_utilities import *
 from maps_sats import *
 #-------------------------------------------------------------------------------
+print('hello checkout github')
 
 satref_url = 'https://filedn.com/lqzjnYhpY3yQ7BdfTulG1yY/AIE_maps/'
 weatherref_url = 'https://filedn.com/lqzjnYhpY3yQ7BdfTulG1yY/AIE_weather/BaliBotanicalGardenWeather_Ref.csv'

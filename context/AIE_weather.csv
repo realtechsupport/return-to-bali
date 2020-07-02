@@ -1,0 +1,9 @@
+humidity [%],93
+max_temperature [C],21.9
+min_temperature [C],21.1
+current_temperature [C],21.3
+rainfall [mm],0.0
+localtime,2020-07-03_03:59
+timezone,(+8GMT)
+source,ubudweather.com
+timestamp,2020-07-02_16:00
