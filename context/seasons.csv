@@ -1,0 +1,29 @@
+plant,,flowering_start,flowering_end,fruiting_start,fruiting_end,harvest_start,harvest_end,comments wawan
+aroid,,,,,,2018-05-01,,"starting from May, we can harvest the tuber"
+bamboo,,,,,,,,cant be predicted
+banana,, 2018-12-01,2019-12-30, 2018-12-01,2019-12-30,,,throughout the year (flowering and fruiting)
+cacao,, 2018-12-01,2019-12-30, 2018-12-01,2019-12-30,,,throughout the year (flowering and fruiting)
+cinnamon,, 2018-10-01, 2019-02-28,2019-05-01,2019-06-30,,,
+coffee arabica,,,,2018-09-01,2019-05-30,,,fruiting September to May
+dragonfruit,,,,2018-09-01,2019-03-31,,,fruiting without cultivation (September – March)
+durian,,,,2018-10-01,2019-02-28,,,fruiting October to February
+frangipani,,2018-01-01,2019-12-31,,,,,flowering throughout the year
+guava,, 2018-12-01,2019-12-30, 2018-12-01,2019-12-30,,,flowering and fruiting throughout the year
+jackfruit,, 2018-12-01,2019-12-01, 2018-12-01,2019-12-01,,,flowering and fruiting throughout the year
+lychee,,,,2019-06-01,2019-07-30,,,"fruiting june, july"
+mango,,,,2019-08-01,2019-11-30,,,"Fruiting August to November, and April to June"
+mango,,,,2019-04-01,2019-06-30,,,"Fruiting August to November, and April to June"
+mangosteen,,,,2018-11-01,2019-03-31,,,Fruiting November to March
+nilam,,,,,,,,"no flowering, fruiting ?…leaves used for essential oils"
+papaya,, 2018-12-01,2019-12-30, 2018-12-01,2019-12-30,,,flowering and fruiting throughout the year
+passiflora,,,,2019-08-01,2019-09-30,,,fruiting August - September
+sawo,,,,2018-12-01,2019-05-30,,,fruiting December to May
+snakefruit,,,,2019-01-01,2019-04-30,,,fruiting January to April
+starfruit,,,,2019-01-01,2019-02-28,,,"Fruiting is January, February, July, August"
+starfruit,,,,2019-07-01,2019-08-30,,,"Fruiting is January, February, July, August"
+sugarpalm,, 2018-12-01,2019-12-30, 2018-12-01,2019-12-30,,,flowering and fruiting throughout the year
+taro,, 2018-12-01,2019-12-30, 2018-12-01,2019-12-30,,,flowering and fruiting throughout the year
+vanilla,,2019-09-01,2019-10-30,2019-11-01,2019-12-30,,,"flowering September to October, and fruiting November - January"
+waterguava,, 2018-12-01,2019-12-30, 2018-12-01,2019-12-30,,,flowering and fruiting throughout the year
+whitepepper,,2019-05-01,2019-10-30,2019-05-01,2019-10-30,,,flowering and fruiting is May to October
+zodia,, 2018-12-01,2019-12-01, 2018-12-01,2019-12-01,,,flowering and fruiting throughout the year
