@@ -96,3 +96,20 @@ def rename_all(source, offset):
         os.rename(tsrc, dst)
 
 #-------------------------------------------------------------------------------
+def download_check(currenturl, referenceurl, referencefile, target, location, targetfile):
+    try:
+        file = wget.download(currenturl, target)
+        if os.path.exists(target):
+                shutil.move(file, target)
+        #get the reference data only once
+        path, dirs, files = next(os.walk(location))
+        if(referencefile in files):
+            print('already downloaded the data..')
+            pass
+        else:
+            wget.download(referenceurl, targetfile)
+
+    except:
+        'data download failed...'
+        pass
+#-------------------------------------------------------------------------------
