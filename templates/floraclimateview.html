@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<title>floraclimateview.html</title>
+
+<center>
+<h2>weather reference, flowering seasons and religious festivals</h2>
+</center>
+
+<centerV3>
+<br><br><br>
+<img src="{{url_for('static', filename=multiplot) }}" width="1000">
+
+
+</centerV3>
+
+
+<br><br>
+<center>
+<a href="{{ url_for('index') }}"> back to start </a>
+</center>
+
+{% endblock %}
+</body>
+</html>
