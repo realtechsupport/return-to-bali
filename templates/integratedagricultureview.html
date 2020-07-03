@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<title>contextview.html</title>
+
+<center>
+<h2> informal integrated agriculture </h2>
+
+<br><br>
+<i> an interview with Made Darmajan, Febuary 2020 </i>
+</center>
+
+<video controls id="thisvideo" poster="/static/Untitled.png" video width="640" height="480">
+      <!---<video controls id="thisvideo" video width="640" height="360">--->
+      <source src={{ url_for('static', filename=showvideo) }} type="video/webm">
+</video>
+<br><br>
+
+
+<center>
+<i> ... extract text with the module 'text from video' module in this collection ... </i>
+<br><br>
+<a href="{{ url_for('index') }}"> back to start </a>
+</center>
+
+{% endblock %}
+</body>
+</html>

@@ -93,8 +93,8 @@ def create_weatherplot(referenceweatherdatafile, currentweatherdatafile, destina
     dataset = dataset.sort_values(by='Date+Time',ascending=True)
     dataset.drop_duplicates(subset='Date+Time', keep=False, inplace=True)
     #print(dataset.head(10))
-    print(dataset['Dates_only'].tail(10))
-    print(dataset['Date+Time'].tail(10))
+    #print(dataset['Dates_only'].tail(10))
+    #print(dataset['Date+Time'].tail(10))
 
     fig, ax1 = plt.subplots(figsize=(24,8))
     ax1.set_facecolor('whitesmoke')
