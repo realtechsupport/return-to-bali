@@ -23,6 +23,7 @@ import math
 from random import *
 from datetime import datetime
 import pytz
+from pathlib import Path
 
 #-------------------------------------------------------------------------------
 def create_timestamp(item, location):
@@ -117,16 +118,20 @@ def downloadweather_check(currenturl, referenceurl, referencefile, target, locat
 def downloadassets_check(current_url, location, filename):
 
     targetfile = os.path.join(location, filename)
-    #print('\nInside download assets ..', filename, targetfile)
+    asset_saved = False
     try:
         path, dirs, files = next(os.walk(location))
         if(filename in files):
             print('\nalready downloaded the data..\n')
+            asset_saved = True
             pass
         else:
             wget.download(current_url, targetfile)
+            asset_saved = True
 
     except:
-        'data download failed...'
+        asset_saved = False
         pass
+
+    return(asset_saved)
 #-------------------------------------------------------------------------------

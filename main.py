@@ -36,6 +36,7 @@ weatherref_url = 'https://filedn.com/lqzjnYhpY3yQ7BdfTulG1yY/AIE_weather/BaliBot
 weathercurrent_url = 'https://filedn.com/lqzjnYhpY3yQ7BdfTulG1yY/AIE_weather/AIE_weather.csv'
 seasons_url = 'https://filedn.com/lqzjnYhpY3yQ7BdfTulG1yY/AIE_context/seasons.csv'
 events_url = 'https://filedn.com/lqzjnYhpY3yQ7BdfTulG1yY/AIE_context/events.csv'
+interview_url = 'https://filedn.com/lqzjnYhpY3yQ7BdfTulG1yY/AIE_context/darmaja_interview_1min.webm'
 weatherref_file = 'refweatherdata.csv'
 weathercurrent_file = 'AIE_weather.csv'
 
@@ -632,8 +633,10 @@ def floraclimateview():
     wcurtarget = os.path.join(location, weathercurrent_file)
 
     downloadweather_check(weathercurrent_url, weatherref_url, weatherref_file, wcurtarget, location, wreftarget)
-    downloadassets_check(seasons_url, location, seasons)
-    downloadassets_check(events_url, location, festivals)
+    asset_saved = downloadassets_check(seasons_url, location, seasons)
+    print('\ngot the asset: ', asset_saved)
+    asset_saved = downloadassets_check(events_url, location, festivals)
+    print('\ngot the asset: ', asset_saved)
 
     festivalsdatafilepath = os.path.join(location, festivals)
     seasonsdatafilepath = os.path.join(location, seasons)
@@ -685,6 +688,24 @@ def prepareview():
 
     return render_template(template, form=form, result=chunkresult)
 
+#-------------------------------------------------------------------------------
+@app.route('/integratedagricultureview', methods=['GET', 'POST'])
+def integratedagricultureview():
+    template = 'integratedagricultureview.html'
+    avideo = interview_url.split('/')[-1]
+    location = app.config['CONTEXT']
+    destination = app.config['STATIC']
+    asset_saved = downloadassets_check(interview_url, location, avideo)
+    print('\ngot the asset: ', asset_saved)
+    if(asset_saved == True):
+        #issue - moving the file generates an error (in eventlet wsgi.py) but not a failure... only in debug mode
+        #Path(start).rename(end)
+        #os.replace(start, end)
+        start = os.path.join(location, avideo)
+        end = os.path.join(destination, avideo)
+        shutil.copyfile(os.path.join(location, avideo), os.path.join(destination, avideo))
+
+    return render_template(template, showvideo=avideo)
 #-------------------------------------------------------------------------------
 
 if __name__ == '__main__':
