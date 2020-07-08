@@ -719,7 +719,7 @@ if __name__ == '__main__':
             osy = sys.argv[1]
             browser = sys.argv[2]
             debug_mode = sys.argv[3]
-            print('\n > operating system: ', osy)
+            print('\n> operating system: ', osy)
             print('> browser: ', browser)
             print('> mode: ', debug_mode)
         except:
