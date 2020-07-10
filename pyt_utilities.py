@@ -44,6 +44,7 @@ bali3B_zip = 'https://filedn.com/lqzjnYhpY3yQ7BdfTulG1yY/bali-3B.zip'
 bali3C_zip = 'https://filedn.com/lqzjnYhpY3yQ7BdfTulG1yY/bali-3C.zip'
 bali3D_zip = 'https://filedn.com/lqzjnYhpY3yQ7BdfTulG1yY/bali-3D.zip'
 tests_zip = 'https://filedn.com/lqzjnYhpY3yQ7BdfTulG1yY/tests.zip'
+bali_mixedplants_zip = 'https://filedn.com/lqzjnYhpY3yQ7BdfTulG1yY/bali_mixedplants.zip'
 
 #-------------------------------------------------------------------------------
 data_transforms = {

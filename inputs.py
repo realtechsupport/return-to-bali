@@ -28,7 +28,7 @@ class MakeClassifiers(FlaskForm):
 
 class TestClassifiers(FlaskForm):
     classifier = SelectField('classifier', choices =  [('bali26_resnet152.pth', 'Resnet152 (bali26)'),('bali26_resnext50.pth', 'Resnext50 (bali26)'),('bali26_alexnet.pth', 'Alexnet (bali26)')], default=('bali26_resnet152.pth'), validators=[validators.InputRequired()])
-    testcollection = SelectField('test collection', choices =  [('bali26samples', 'bali26'),('tba', 'tba')], default=('bali26samples'), validators=[validators.InputRequired()])
+    testcollection = SelectField('test collection', choices =  [('bali26samples', 'bali26'), ('balimixedplants', 'balimixed'),('tba', 'tba')], default=('bali26samples'), validators=[validators.InputRequired()])
 
 class Checkimagesinputs(FlaskForm):
     ssim_min = IntegerField(label='min structural similarity % (0-99)', default=45, validators=[NumberRange(min=0, max=99), validators.InputRequired()])

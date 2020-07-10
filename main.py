@@ -30,7 +30,7 @@ from similarities import *
 from pyt_utilities import *
 from maps_sats import *
 #-------------------------------------------------------------------------------
-print('hello checkout')
+
 satref_url = 'https://filedn.com/lqzjnYhpY3yQ7BdfTulG1yY/AIE_maps/'
 weatherref_url = 'https://filedn.com/lqzjnYhpY3yQ7BdfTulG1yY/AIE_weather/BaliBotanicalGardenWeather_Ref.csv'
 weathercurrent_url = 'https://filedn.com/lqzjnYhpY3yQ7BdfTulG1yY/AIE_weather/AIE_weather.csv'
@@ -242,6 +242,7 @@ def checkimagesview():
 
     lastentry_d = 0; firstentry_s = 0
 
+
     if (request.method == 'POST'):
         ssim_min = form.ssim_min.data;
         lum_max = form.lum_max.data;
@@ -290,7 +291,7 @@ def checkimagesview():
             try:
                 images2remove = session.get('s_images2remove', None)
                 imlist = json.loads(images2remove)
-                im_loc = os.path.join(app.config['IMAGES'], key) + '/'
+                im_loc = os.path.join(app.config['IMAGES'], category) + '/'
                 im_ref =  imlist[-1]
                 nbad = remove_fuzzy_over_under_exposed(im_ref, im_loc, images, ssim_min, lum_max, lum_min)
                 print('removed ' +  str(nbad) + ' images...')
@@ -303,7 +304,7 @@ def checkimagesview():
                 images2remove = session.get('s_images2remove', None)
                 imlist = json.loads(images2remove)
                 for im in imlist:
-                    im_s = os.path.join(app.config['IMAGES'], key, im)
+                    im_s = os.path.join(app.config['IMAGES'], category, im)
                     print(im_s)
                     try:
                         os.remove(im_s)
@@ -412,15 +413,21 @@ def testclassifiers():
         if(len(files) == 0):
             if(testcollection == 'bali26samples'):
                 archive = bali26_samples_zip
-                print('downloading the samples...')
-                wget.download(archive, zfile)
-                shutil.unpack_archive(zfile, app.config['FIND'], 'zip')
-                os.remove(zfile)
+            elif(testcollection == 'balimixedplants'):
+                archive = bali_mixedplants_zip
             else:
-                #here other archives
                 archive = bali26_samples_zip
 
+            '''
+            print('this is the archive: ', archive)
+            print('this is the testcollection', testcollection)
+            '''
+            print('downloading the samples...')
+            wget.download(archive, zfile)
+            shutil.unpack_archive(zfile, app.config['FIND'], 'zip')
+            os.remove(zfile)
         #----------------------------------
+
         images = os.listdir(location)
 
         if("display" in request.form):
@@ -430,8 +437,18 @@ def testclassifiers():
             classifier = form.classifier.data
             session['s_testcollection'] = testcollection
 
-            if(testcollection != 'bali26samples'):
-                print('here actions for other testcollections')
+            if(testcollection == 'balimixedplants'):
+                class_names = bali26_class_names
+
+                if('Resnet152'.lower() in classifier):
+                    archive = bali26_resnet152
+                elif('Resnext50'.lower() in classifier):
+                    archive = bali26_rexnext50
+                elif('Alexnet'.lower() in classifier):
+                    archive = bali26_alexnet
+                else:
+                    archive = bali26_alexnet
+
 
             if(testcollection == 'bali26samples'):
                 class_names = bali26_class_names
@@ -441,17 +458,19 @@ def testclassifiers():
                 elif('Resnext50'.lower() in classifier):
                     archive = bali26_rexnext50
                 elif('Alexnet'.lower() in classifier):
-                    archive = bali16_alexnet
+                    archive = bali26_alexnet
                 else:
-                    archive = bali16_alexnet
+                    archive = bali26_alexnet
 
-                path, dirs, files = next(os.walk(app.config['MODELS']))
-                if(classifier in files):
-                    pass
-                else:
-                    print('getting the matching trained classifier...')
-                    modelname = archive.split('/')[-1]
-                    wget.download(archive, (os.path.join(app.config['MODELS'], modelname)))
+
+            path, dirs, files = next(os.walk(app.config['MODELS']))
+            if(classifier in files):
+                pass
+            else:
+                print('getting the matching trained classifier...')
+                modelname = archive.split('/')[-1]
+                wget.download(archive, (os.path.join(app.config['MODELS'], modelname)))
+
 
             try:
                 tchoices = session.get('s_choices', None)
