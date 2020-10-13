@@ -6,7 +6,6 @@ models/
 tests/
 find/
 collection/
-ipynb_experiments/
 
 #Pycharm
 .idea/
