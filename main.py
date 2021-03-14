@@ -507,6 +507,125 @@ def testclassifiers():
 
     return render_template(template, form=form, images=images, result=result, moreresults=moreresults, classifier=c_classifier, input=input)
 
+
+#-------------------------------------------------------------------------------
+@app.route('/testmultiplantclassifiers', methods=['GET', 'POST'])
+def testmultiplantclassifiers():
+    form = TestClassifiers()
+    choice = ''; input = ''; images = ''; files = ''; c_classifier = ''
+    result = ''; moreresults = ''; tp_vals = []
+    template = 'testmultiplantclassifiers.html'
+
+    if (request.method == 'POST'):
+        testcollection = form.testcollection.data
+        print('test collection is: ', testcollection)
+        location = os.path.join(app.config['FIND'], testcollection)
+        zfile = os.path.join(app.config['FIND'], testcollection) + '.zip'
+
+        # -------------------------------------
+        # move section to utilities
+        try:
+            path, dirs, files = next(os.walk(location))
+        except:
+            pass
+
+        if(len(files) == 0):
+            if(testcollection == 'bali26samples'):
+                archive = bali26_samples_zip
+            elif(testcollection == 'balimixedplants'):
+                archive = bali_mixedplants_zip
+            else:
+                archive = bali26_samples_zip
+
+            '''
+            print('this is the archive: ', archive)
+            print('this is the testcollection', testcollection)
+            '''
+            print('downloading the samples...')
+            wget.download(archive, zfile)
+            shutil.unpack_archive(zfile, app.config['FIND'], 'zip')
+            os.remove(zfile)
+        #----------------------------------
+
+        images = os.listdir(location)
+
+        if("display" in request.form):
+            session['s_testcollection'] = testcollection
+
+        elif(("classify" in request.form) and (session.get('s_choices', None) != '' )):
+            classifier = form.classifier.data
+            session['s_testcollection'] = testcollection
+
+            if(testcollection == 'balimixedplants'):
+                class_names = bali26_class_names
+
+                if('Resnet152'.lower() in classifier):
+                    archive = bali26_resnet152
+                elif('Resnext50'.lower() in classifier):
+                    archive = bali26_rexnext50
+                elif('Alexnet'.lower() in classifier):
+                    archive = bali26_alexnet
+                else:
+                    archive = bali26_alexnet
+
+
+            if(testcollection == 'bali26samples'):
+                class_names = bali26_class_names
+
+                if('Resnet152'.lower() in classifier):
+                    archive = bali26_resnet152
+                elif('Resnext50'.lower() in classifier):
+                    archive = bali26_rexnext50
+                elif('Alexnet'.lower() in classifier):
+                    archive = bali26_alexnet
+                else:
+                    archive = bali26_alexnet
+
+
+            path, dirs, files = next(os.walk(app.config['MODELS']))
+            if(classifier in files):
+                pass
+            else:
+                print('getting the matching trained classifier...')
+                modelname = archive.split('/')[-1]
+                wget.download(archive, (os.path.join(app.config['MODELS'], modelname)))
+
+
+            try:
+                tchoices = session.get('s_choices', None)
+                choice = json.loads(tchoices)
+                image_path = os.path.join(app.config['FIND'],  testcollection, choice)
+                pclassifier = os.path.join(app.config['MODELS'], classifier)
+                processor='cpu'; tk=3; threshold=90;
+                model = load_checkpoint(pclassifier, processor)
+                predictions, percentage, outcategory = predict_image(image_path, model, predict_transform, class_names, tk, processor)
+                tp_indeces = predictions[1].tolist()[0]
+                for k in tp_indeces:
+                    tp_vals.append(class_names[k])
+
+                input = 'selected image: ' + choice
+                c_classifier = 'selected classifier: ' + classifier
+                result = 'best prediction: ' + outcategory + ' (with confidence level ' + percentage + '%)'
+                moreresults = 'top three predictions: ' + str(tp_vals)
+
+            except:
+                print('... display images before you classify and pick an image with left mouse click... ')
+                return redirect(url_for('testclassifiers'))
+
+        elif("context" in request.form):
+            images = ''
+
+        #left click on mouse collects the images
+        else:
+            try:
+                imagenames = request.form['data']
+                session['s_choices'] = imagenames
+            except:
+                print('no image selected to classify')
+                pass
+
+    return render_template(template, form=form, images=images, result=result, moreresults=moreresults, classifier=c_classifier, input=input)
+
 #-------------------------------------------------------------------------------
 @app.route('/testclassifiers/<filename>')
 def classify_image(filename):
