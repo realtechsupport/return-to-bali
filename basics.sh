@@ -1,8 +1,8 @@
 #!/bin/bash
-# RTS, feb 2020
+# RTS, march 2021
 #-------------------------------------------
 clear
-echo "WELCOME - basics for C+R installaton "
+echo "WELCOME - basics for AI in Ethnobotany - Return to Bali installaton "
 
 sudo apt-get update
 sudo apt-get upgrade -y
