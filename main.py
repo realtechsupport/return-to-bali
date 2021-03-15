@@ -756,7 +756,7 @@ def weathersatview():
     satmap = loop.run_until_complete(task)
 
     title = 'Satellite image of field study site in Central Bali'
-    titlesize = 22; color = (255,255,255); titlelocation = (10,10)
+    titlesize = 18; color = (255,255,255); titlelocation = (10,10)
     satmapname = 'current_satmap.jpg'
     add_title(satmap, satmapname, title, titlesize, dest_folder)
 
