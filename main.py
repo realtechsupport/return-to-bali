@@ -729,7 +729,7 @@ def contextview():
 
 #-------------------------------------------------------------------------------
 @app.route('/contextview_bahasa', methods=['GET', 'POST'])
-def contextview():
+def contextview_bahasa():
     template = 'contextview_bahasa.html'
 
     return render_template(template)
