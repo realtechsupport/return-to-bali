@@ -2,7 +2,7 @@
 
 <b>Introduction</b>
 
-Return to Bali’s goal is to facilitate the creation of under-represented knowledge in machine learning in general, and experimental datasets for neural network image classification in particular. Return to Bali applies these procedures to the study of Ethnobotany on the island of Bali where Mead and Bateson, of second order cybernetics fame, collected field data for the book Balinese Character: A Photographic Analysis (1942). 
+Return to Bali’s goal is to facilitate the creation of under-represented knowledge in machine learning in general, and experimental datasets for neural network image classification in particular. Return to Bali applies these procedures to the study of Ethnobotany on the island of Bali where Mead and Bateson, of second order cybernetics fame, collected field data for the book <i>Balinese Character: A Photographic Analysis </i> (1942). 
 
 While the tourist destination Bali has been subject to numerous exploitative practices, this project aims to bend machine learning to collect data responsibly and to help maintain the body of local ecological knowledge that has been documented as declining specifically amongst Balinese youth. 
 
@@ -28,6 +28,7 @@ The software has been tested on a desktop (i7-4770 CPU with 16GB of memory) and 
 
 
 <b> Browser installation </b>
+
 Recommended browser: Chromium.
 
 Install Chromium on Ubuntu:
@@ -35,6 +36,7 @@ sudo apt install -y chromium-browser
 
 Install Chromium on Mac OS:
 https://apple.stackexchange.com/questions/78805/chromium-builds-for-mac-os-x/215426#215426
+
 (Currently recommended method)
 
 Install the free Classic Cache Killer:
@@ -73,7 +75,7 @@ Cd to to the ai-ethnobotany directory again. Install Requirements and Dependenci
 
 Generate an STT key (optional)
 
-While there are multiple providers of Speech to Text services, the most effective offering with the widest range of languages is at this moment provided by Google. If you want to make use of the text from video extraction you should obtain an access key to the Google Speech API. Creation of this key is free of charge and you can use it in this software at no cost as AIE operates within free limits of the API. However, you do require a google account in order to create the key. If that is not palatable, skip the section that makes use of the Speech API.
+While there are multiple providers of Speech to Text services, the most effective offering with the widest range of languages is at this moment provided by Google. If you want to make use of the text from video extraction you should obtain an access key to the Google Speech API. Creation of this key is free of charge and you can use it in this software at no cost as this project operates within free limits of the API. However, you do require a google account in order to create the key. If that is not palatable, skip the section that makes use of the Speech API.
 
 Instructions to generate a key:
 
