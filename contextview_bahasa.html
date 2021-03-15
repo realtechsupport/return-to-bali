@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block content %}
+<title>contextview.html</title>
+
+<center>
+<h2> plants represented in the collection </h2>
+
+<a href="{{ url_for('contextview') }}"> <i> -> english </i> </a>
+</center>
+
+
+<br><br>
+Dataset bali-26 berisi gambar dari 26 kategori tumbuhan, pohon, buah-buahan dan biji-bijian yang signifikan secara etnobotani. Setiap kategori diwakili oleh antara 1000 dan 2500 gambar.
+Semua gambar dalam koleksi ini dikumpulkan di Pulau Bali di sekitar Ubud, tepatnya di Desa Penglipuran, Kerta, Jatiluwih, Buahan, Sekaan dan Bayung Gede.
+antara akhir bulan Februari dan Mei 2020.
+<br><br>
+Gambar (1080 x 1920 .jpg) dibuat dari video ponsel definisi tinggi yang diambil oleh pengumpul data di lapangan.
+File video diubah menjadi gambar berlabel dengan perangkat lunak <a href="https://github.com/realtechsupport/c-plus-r"> Catch & Release </a>.
+<br><br>
+Unduh image dataset (4GB): <a href="https://filedn.com/lqzjnYhpY3yQ7BdfTulG1yY/bali-26.zip">bali-26 collection</a>, rilis 1.0 (4GB)
+<br><br>
+Terima kasih untuk Gusti Sutarjana, keluarganya, dan Made Darmaja yang telah berbagi ilmunya.
+<br><br>
+
+<style type="text/css">
+	table.tableizer-table {
+		font-size: 12px;
+		border: 1px solid #CCC;
+		font-family: Arial, Helvetica, sans-serif;
+	}
+	.tableizer-table td {
+		padding: 4px;
+		margin: 3px;
+		border: 1px solid #CCC;
+	}
+	.tableizer-table th {
+		background-color: #BABBBB;
+		color: #FFF;
+		font-weight: bold;
+	}
+</style>
+
+
+<table class="tableizer-table">
+<thead><tr class="tableizer-firstrow"><th>nama tumbuhan umum</th><th>nama tumbuhan ilmiah</th><th>etnobotani</th><th>contoh</th></tr></thead><tbody>
+ <tr><td>Suweg</td><td>Amorphophallus paeoniifolius</td><td>Rebusan umbi dimakan sebagai makanan pokok</td><td><a href="../imgs/bali26/aroid.jpg"> IMG </a></td></tr>
+ <tr><td>Bambu tali</td><td>Gigantochloa apus</td><td>Rebung dimasak sebagai sup sayuran</td><td><a href="../imgs/bali26/bamboo.jpg"> IMG </a></td></tr>
+ <tr><td>Pisang, biu</td><td>Musa x paradisiaca</td><td>Batang inti dimasak sebagai sup sayuran</td><td><a href="../imgs/bali26/banana.jpg"> IMG </a></td></tr>
+ <tr><td>Coklat</td><td>Theobroma cacao</td><td>Rebusan bubuk biji diminum untuk relaksasi</td><td><a href="../imgs/bali26/cacao.jpg"> IMG </a></td></tr>
+ <tr><td>Kopi arabika</td><td>Coffea canephora</td><td>Rebusan bubuk biji diminum untuk relaksasi</td><td><a href="../imgs/bali26/coffeearabica.jpg"> IMG </a></td></tr>
+ <tr><td>Buah naga</td><td>Hylocereus costaricensis</td><td>Buah digunakan dalam persembahan religius</td><td><a href="../imgs/bali26/dragonfruit.jpg"> IMG </a></td></tr>
+ <tr><td>Durian</td><td>Durio zibethinus</td><td>Buah digunakan dalam persembahan religius</td><td><a href="../imgs/bali26/durian.jpg"> IMG </a></td></tr>
+ <tr><td>Kamboja, jepun</td><td>Plumeria alba</td><td>Jus bunga dioleskan ke kulit untuk penyakit cacar; Bunga digunakan dalam persembahan religius</td><td><a href="../imgs/bali26/frangipane.jpg"> IMG </a></td></tr>
+ <tr><td>Jambu biji, sotong</td><td>Psidium guajava</td><td>Buah matang dimakan segar, dan digunakan dalam persembahan religius</td><td><a href="../imgs/bali26/guava.jpg"> IMG </a></td></tr>
+ <tr><td>Kayu manis</td><td>Cinnamomum burmanii</td><td>Kulit kayu digunakan sebagai bumbu; Rebusan daun dan kulit batang digunakan untuk sakit maag, demam, batuk, radang tenggorokan, hipertensi, dan untuk menignkatkan nafsu makan</td><td><a href="../imgs/bali26/cinnamon.jpg"> IMG </a></td></tr>
+ <tr><td>Nangka</td><td>Artocarpus heterophyllus</td><td>Buah muda dan biji dimasuk sebagai sup sayuran; Rebusan daun diminum untuk diare</td><td><a href="../imgs/bali26/jackfruit.jpg"> IMG </a></td></tr>
+ <tr><td>Leci</td><td>Litchi chinensis</td><td>Buah matang dimakan segar, dan digunakan dalam persembahan religius</td><td><a href="../imgs/bali26/lychee.jpg"> IMG </a></td></tr>
+ <tr><td>Mangga</td><td>Mangifera indica</td><td>Rebusan daun diminum untuk diabetes dan hipertensi</td><td><a href="../imgs/bali26/mango.jpg"> IMG </a></td></tr>
+ <tr><td>Manggis</td><td>Garcinia mangostana</td><td>Buah matang dimakan segar, dan digunakan dalam persembahan religius</td><td><a href="../imgs/bali26/mangosteen.jpg"> IMG </a></td></tr>
+ <tr><td>Nilam</td><td>Pogostemon cablin</td><td>Rebusan daun diminum untuk sakit kepala, disentri, rematik, dan sebagai diurretik</td><td><a href="../imgs/bali26/nilam.jpg"> IMG </a></td></tr>
+ <tr><td>Pepaya</td><td>Carica papaya</td><td>Buah dan daun muda dimasak sebagai sup sayuran</td><td><a href="../imgs/bali26/papaya.jpg"> IMG </a></td></tr>
+ <tr><td>Markisa</td><td>Passiflora edulis</td><td>Buah matang dimakan segar</td><td><a href="../imgs/bali26/passiflora.jpg"> IMG </a></td></tr>
+ <tr><td>Sawo</td><td>Manilkara zapota</td><td>Buah matang dimakan segar, dan digunakan dalam persembahan religius</td><td><a href="../imgs/bali26/sawo.jpg"> IMG </a></td></tr>
+ <tr><td>Salak</td><td>Salacca zalacca</td><td>Buah matang dimakan segar, dan digunakan dalam persembahan religius</td><td><a href="../imgs/bali26/snakefruit.jpg"> IMG </a></td></tr>
+ <tr><td>Belimbing</td><td>Averrhoa carambola</td><td>Buah dan daun dimasak sebagai sup sayuran; Jus daun diminum untuk panas dalam</td><td><a href="../imgs/bali26/starfruit.jpg"> IMG </a></td></tr>
+ <tr><td>Aren, jaka</td><td>Arenga pinnata</td><td>Rebusan batang bagian dalam dimakan sebagai makanan pokok; Rebusan akar diminum untuk kencing batu; Rebusan buah dapat dimakan; Daun digunakan dalam persembahan religius</td><td><a href="../imgs/bali26/sugarpalm.jpg"> IMG </a></td></tr>
+ <tr><td>Talas, keladi</td><td>Colocasia esculenta</td><td>Rebusan umbi dimakan sebagai makanan pokok; Daun dimasak sebagai sup sayuran</td><td><a href="../imgs/bali26/taro.jpg"> IMG </a></td></tr>
+ <tr><td>Panili, vanili</td><td>Vanilla planifolia</td><td>Bubuk buah digunakan sebagai penghasil rasa vanila</td><td><a href="../imgs/bali26/vanilla.jpg"> IMG </a></td></tr>
+ <tr><td>Jambu air</td><td>Syzygium aqueum</td><td>Buah matang dimakan segar</td><td><a href="../imgs/bali26/waterguava.jpg"> IMG </a></td></tr>
+ <tr><td>Lada, mica</td><td>Piper nigrum</td><td>Bubuk biji digunakan sebagai bumbu </td><td><a href="../imgs/bali26/whitepepper.jpg"> IMG </a></td></tr>
+ <tr><td>Zodia</td><td>Evodia sauveolens</td><td>Daun digunakan sebagai anti nyamuk</td><td><a href="../imgs/bali26/zodia.jpg"> IMG </a></td></tr>
+</tbody></table>
+
+</table>
+
+<br><br>
+
+<center>
+<a href="{{ url_for('index') }}"> back to start </a>
+</center>
+
+{% endblock %}
+</body>
+</html>

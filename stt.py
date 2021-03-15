@@ -4,7 +4,7 @@
 # Catch+Release
 # Flask interface for linux computers
 # experiments in knowledge documentation; with an application to AI for ethnobotany
-#spring 2020
+# spring 2020
 # tested on ubuntu 18 LTS, kernel 5.3.0
 #-------------------------------------------------------------------------------
 import sys, os

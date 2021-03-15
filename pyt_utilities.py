@@ -1,7 +1,7 @@
 # pyt_utilities.py (python3)
 # utilities for CNN training with pytorch;  data preparation, training, evaluation
 # added saving checkpoint
-# FEB 2020
+# FEB 2020 / 21
 # sources:
 # https://pytorch.org/tutorials/beginner/transfer_learning_tutorial.html#load-data
 # https://pytorch.org/tutorials/beginner/finetuning_torchvision_models_tutorial.html

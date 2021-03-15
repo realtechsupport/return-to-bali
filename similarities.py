@@ -2,6 +2,7 @@
 # similarities.py (python3)
 # routines to check image similarities / qualities
 # with 2 methods, MSE and SSIM
+# March 2021
 # https://scikit-image.org/docs/dev/auto_examples/transform/plot_ssim.html
 #-------------------------------------------------------------------------------
 

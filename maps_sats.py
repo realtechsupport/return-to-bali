@@ -2,7 +2,7 @@
 # ------------------------------------------------------------------------------
 # Python program to get a (the newest) image asset from a public folder on pCloud
 # add real time data and create an Image
-# AI for Ethnobotany - AI for Earth
+# Return to Bali - AI for Earth
 # June 2020
 # trying out asynch to do this
 # https://lucumr.pocoo.org/2016/10/30/i-dont-understand-asyncio/

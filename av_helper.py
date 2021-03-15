@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # av_helper.py
 # utilities for audio and video processing
-# Catch+Release
+# Catch+Release / Return to Bali
 # Flask interface for linux computers
 # experiments in knowledge documentation; with an application to AI for ethnobotany
 # jan 2020

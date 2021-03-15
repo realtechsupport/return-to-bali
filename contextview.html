@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block content %}
+<title>contextview.html</title>
+
+<center>
+<h2> plants represented in the collection </h2>
+
+<a href="{{ url_for('contextview_bahasa') }}"> <i> -> bahasa indonesia </i> </a>
+</center>
+
+
+<br><br>
+The bali-26 dataset contains images of 26 categories of ethnobotanically significant trees, plants, fruits and seeds. Each category is represented by between 1000 and 2500 images.
+All images in this collection were collected on the Island of Bali in the vicinity of Ubud, specifically in the villages of Penglipuran, Kerta, Jatiluwih, Buahan, Sekaan and Bayung Gede
+between the months of late February and May 2020, with some additions during the spring of 2021.
+<br><br>
+The images (1080 x 1920 .jpg) were created from high definition mobile phone video shot by data collectors in the field.
+The video files were converted to labeled images with the <a href="https://github.com/realtechsupport/c-plus-r"> Catch & Release </a> software package.
+<br><br>
+Download the image dataset (4GB): <a href="https://filedn.com/lqzjnYhpY3yQ7BdfTulG1yY/bali-26.zip">bali-26 collection</a>, release 1.0 (4GB)
+<br><br>
+Special thanks to Gusti Sutarjana, his family, and Made Darmaja for sharing their knowledge.
+<br><br>
+
+<style type="text/css">
+	table.tableizer-table {
+		font-size: 12px;
+		border: 1px solid #CCC;
+		font-family: Arial, Helvetica, sans-serif;
+	}
+	.tableizer-table td {
+		padding: 4px;
+		margin: 3px;
+		border: 1px solid #CCC;
+	}
+	.tableizer-table th {
+		background-color: #BABBBB;
+		color: #FFF;
+		font-weight: bold;
+	}
+</style>
+
+
+<table class="tableizer-table">
+<thead><tr class="tableizer-firstrow"><th>common plant name</th><th>scientific plant name</th><th>ethnobotany</th><th>example</th></tr></thead><tbody>
+ <tr><td>Elephant foot yam</td><td>Amorphophallus paeoniifolius</td><td>Boiled tuberous roots eaten as staple food</td><td><a href="../imgs/bali26/aroid.jpg"> IMG </a></td></tr>
+ <tr><td>Bamboo</td><td>Gigantochloa apus</td><td>Cooked young shoots added to vegetable soups</td><td><a href="../imgs/bali26/bamboo.jpg"> IMG </a></td></tr>
+ <tr><td>Banana</td><td>Musa x paradisiaca</td><td>Cooked core stems added to vegetable soups</td><td><a href="../imgs/bali26/banana.jpg"> IMG </a></td></tr>
+ <tr><td>Cacao</td><td>Theobroma cacao</td><td>Decoction of seeds powder for inducing relaxation</td><td><a href="../imgs/bali26/cacao.jpg"> IMG </a></td></tr>
+ <tr><td>Coffee arabica</td><td>Coffea canephora</td><td>Decoction of seeds powder for inducing relaxation</td><td><a href="../imgs/bali26/coffeearabica.jpg"> IMG </a></td></tr>
+ <tr><td>Dragonfruit</td><td>Hylocereus costaricensis</td><td>Fruits used in religious offerings</td><td><a href="../imgs/bali26/dragonfruit.jpg"> IMG </a></td></tr>
+ <tr><td>Durian</td><td>Durio zibethinus</td><td>Fruits used in religious offerings</td><td><a href="../imgs/bali26/durian.jpg"> IMG </a></td></tr>
+ <tr><td>Frangipani</td><td>Plumeria alba</td><td>Juice of flowers is applied to the skin for smallpox; Flower used in religious offerings</td><td><a href="../imgs/bali26/frangipane.jpg"> IMG </a></td></tr>
+ <tr><td>Guava</td><td>Psidium guajava</td><td>Ripe fruit eaten fresh, and used in religious offerings</td><td><a href="../imgs/bali26/guava.jpg"> IMG </a></td></tr>
+ <tr><td>Indonesian cinnamon</td><td>Cinnamomum burmanii</td><td>Barks used as spices; Decoction of leaves and barks used for heartburn, fever, cough, sore throat, hypertension, and to stimulate the appetite</td><td><a href="../imgs/bali26/cinnamon_th.jpg"> IMG </a></td></tr>
+ <tr><td>Jackfruit</td><td>Artocarpus heterophyllus</td><td>Cooked young fruit and seeds added to vegetable soups; Decoction of leaves for diarrhea</td><td><a href="../imgs/bali26/jackfruit.jpg"> IMG </a></td></tr>
+ <tr><td>Lychee</td><td>Litchi chinensis</td><td>Ripe fruit eaten fresh, and used in religious offerings</td><td><a href="../imgs/bali26/lychee.jpg"> IMG </a></td></tr>
+ <tr><td>Mango </td><td>Mangifera indica</td><td>Decoction of leaves for diabetes and hypertension</td><td><a href="../imgs/bali26/mango.jpg"> IMG </a></td></tr>
+ <tr><td>Mangosten</td><td>Garcinia mangostana</td><td>Ripe fruit eaten fresh, and used in religious offerings</td><td><a href="../imgs/bali26/mangosteen.jpg"> IMG </a></td></tr>
+ <tr><td>Nilam</td><td>Pogostemon cablin</td><td>Decoction of leaves for headache, dysentery, rheumatic, and as diuretic</td><td><a href="../imgs/bali26/nilam.jpg"> IMG </a></td></tr>
+ <tr><td>Papaya</td><td>Carica papaya</td><td>Cooked fruit and young leaves added to vegetable soups</td><td><a href="../imgs/bali26/papaya.jpg"> IMG </a></td></tr>
+ <tr><td>Passiflora</td><td>Passiflora edulis</td><td>Ripe fruit eaten fresh</td><td><a href="../imgs/bali26/passiflora.jpg"> IMG </a></td></tr>
+ <tr><td>Sawo</td><td>Manilkara zapota</td><td>Ripe fruit eaten fresh, and used in religious offerings</td><td><a href="../imgs/bali26/sawo.jpg"> IMG </a></td></tr>
+ <tr><td>Snakefruit</td><td>Salacca zalacca</td><td>Ripe fruit eaten fresh, and used in religious offerings</td><td><a href="../imgs/bali26/snakefruit.jpg"> IMG </a></td></tr>
+ <tr><td>Starfruit</td><td>Averrhoa carambola</td><td>Cooked fruit and leaves added to vegetable soups; Juice of leaves for heartburn</td><td><a href="../imgs/bali26/starfruit.jpg"> IMG </a></td></tr>
+ <tr><td>Sugarplam</td><td>Arenga pinnata</td><td>Boiled inner stems eaten as staple food; Decoction of roots for urolithiasis; Edible boiled fruit; Leaves used in religious offerings</td><td><a href="../imgs/bali26/sugarpalm.jpg"> IMG </a></td></tr>
+ <tr><td>Taro</td><td>Colocasia esculenta</td><td>Boiled tuberous roots eaten as staple food; Cooked leaves added to vegetable soups</td><td><a href="../imgs/bali26/taro.jpg"> IMG </a></td></tr>
+ <tr><td>Vanilla</td><td>Vanilla planifolia</td><td>Fruit powder used as vanilla flavoring</td><td><a href="../imgs/bali26/vanilla.jpg"> IMG </a></td></tr>
+ <tr><td>Waterguava</td><td>Syzygium aqueum</td><td>Ripe fruit eaten fresh</td><td><a href="../imgs/bali26/waterguava.jpg"> IMG </a></td></tr>
+ <tr><td>Whitepepper</td><td>Piper nigrum</td><td>Seeds powder used as spice</td><td><a href="../imgs/bali26/whitepepper.jpg"> IMG </a></td></tr>
+ <tr><td>Zodia</td><td>Evodia sauveolens</td><td>Leaves used for mosquito repellent</td><td><a href="../imgs/bali26/zodia.jpg"> IMG </a></td></tr>
+</tbody></table>
+
+</table>
+
+<br><br>
+
+<center>
+<a href="{{ url_for('index') }}"> back to start </a>
+</center>
+
+{% endblock %}
+</body>
+</html>

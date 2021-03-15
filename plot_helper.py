@@ -1,7 +1,7 @@
 # plot_helper.py (python3)
 # utilities for graphic display of training and evaluation of CNNs
 # experiments in knowledge documentation; with an application to AI for ethnobotany
-# March 2020
+# March 2020 / 21
 #-------------------------------------------------------------------------------
 import os, sys, glob
 from pyt_utilities import *

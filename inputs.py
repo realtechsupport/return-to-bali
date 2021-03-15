@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 # inputs.py
 # input classes
-# Catch+Release
+# Catch+Release / Return to Bali
 # Flask interface for linux computers
 # experiments in knowledge documentation; with an application to AI for ethnobotany
-# jan - may 2020
+# jan - march 2021
 # tested on ubuntu 18 LTS, kernel 5.3.0
 #-------------------------------------------------------------------------------
 from wtforms import *

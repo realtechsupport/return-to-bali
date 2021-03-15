@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # main.py
-# AI for Ethnobotany
-# spring 2020
+# Return to Bali
+# spring 2021
 # tested on ubuntu 18 LTS, kernel 5.3.0
 #-------------------------------------------------------------------------------
 #1. start virtual env
@@ -725,6 +725,12 @@ def showinfoview():
 def contextview():
     template = 'contextview.html'
 
+    return render_template(template)
+
+#-------------------------------------------------------------------------------
+@app.route('/contextview_bahasa', methods=['GET', 'POST'])
+def contextview():
+    template = 'contextview_bahasa.html'
 
     return render_template(template)
 
