@@ -4,14 +4,15 @@
 
 Return to Bali’s goal is to facilitate the creation of under-represented knowledge in machine learning in general, and experimental datasets for neural network image classification in particular. Return to Bali applies these procedures to the study of Ethnobotany on the island of Bali where Mead and Bateson, of second order cybernetics fame, collected field data for the book <i>Balinese Character: A Photographic Analysis </i> (1942). 
 
-While the tourist destination Bali has been subject to numerous exploitative practices, this project aims to bend machine learning to collect data responsibly and to help maintain the body of local ecological knowledge that has been documented as declining specifically amongst Balinese youth. 
+While Bali has been subject to numerous exploitative practices, this project aims to bend machine learning to collect data responsibly and to assess if machine learning might help maintain the body of local ecological knowledge that has been documented as declining specifically amongst Balinese youth. 
 
-More generally, Return to Bali allows anyone with a mobile phone to create viable datasets for image classification and to train state of the art convolutional neural networks with these datasets. As such it will hopefully faciliate similar projects in other underrepresented domains.
+Return to Bali includes a dataset, bali-26, produced from field videos documenting 26 ethnobotanically significant plants of South East Asia, several of which are indigenous to the island of Bali. The videos show the plants in multiple stages of growth and include fruits, leaves, branches and bark where applicable, from multiple locations within the field study site of Central Bali and under varying lighting conditions.
 
-Furthermore, the software can extract text from video. 
+The high definition mobile phone video files shot by data collectors in the field were converted to labeled images with the <a href="https://github.com/realtechsupport/c-plus-r"> Catch & Release </a> software package.
 
-Link to project website: http://www.realtechsupport.org/new_works/return2bali.html
+The software modules included here allow one to parse text from video interviews and to experiment with image classification approaches on the bali-26 data set, the first small collection of ethnobotanically significant plants of South East Asia made amendable to neural network based image classification. The project demonstrates that even the best machine learning algorithms struggle to understand  the visual complexity contained in this image set.
 
+<a href="http://www.realtechsupport.org/new_works/return2bali.html">Additional Documentation</a>
 
 <b>License</b>
 
