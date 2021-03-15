@@ -23,36 +23,19 @@ Cite this software project as follows: ‘Return to Bali version1’
 <b>Context</b>
 
 Return to Bali runs on Linux and Mac OS under Python3 and Flask with Chromium or Firefox. 
-
-The software uses the PyTorch framework to train and test image classifiers and connects to the Google Speech API (free) for speech processing. Library versions and dependencies are given in the requirements file.
-The software has been tested on a desktop (i7-4770 CPU with 16GB of memory) and a laptop (i7-3667 CPU with 8GB of memory) under Ubuntu (20. 04 LTS and 18.04 TLS under kernels 5.2.8 and 5.3.0 ) and under Mac OS (Catalina) with images sourced from .mp4 and .webm video (HD [1920 x 1080] at 30f/s; .mp4 H.264 encoded) from multiple (android OS) mobile phones and GoPro Hero 6 action cameras.
-
-
-<b> Browser installation </b>
-
 Recommended browser: Chromium.
 
-Install Chromium on Ubuntu:
-sudo apt install -y chromium-browser
-
-Install Chromium on Mac OS:
-https://apple.stackexchange.com/questions/78805/chromium-builds-for-mac-os-x/215426#215426
-
-(Currently recommended method)
-
-Install the free Classic Cache Killer:
-https://chrome.google.com/webstore/detail/classic-cache-killer/kkmknnnjliniefekpicbaaobdnjjikfp?hl=en
 
 
 <b>Software Installation</b>
 
-Clone the Return to Bali repository on GitHub
+Clone the Return to Bali repository from GitHub.
 Open a terminal window and type:
 
 	git clone https://github.com/realtechsupport/ai-ethnobotany.git
  
 
-Cd to the ai-ethnobotany directory and  run the following commands to update your basic python environment:
+Cd to the project directory and run the following commands to update the python environment:
 
 	chmod +x basics.sh
 	sudo sh basics.sh
@@ -76,40 +59,25 @@ Cd to to the ai-ethnobotany directory again. Install Requirements and Dependenci
 
 Generate an STT key (optional)
 
-While there are multiple providers of Speech to Text services, the most effective offering with the widest range of languages is at this moment provided by Google. If you want to make use of the text from video extraction you should obtain an access key to the Google Speech API. Creation of this key is free of charge and you can use it in this software at no cost as this project operates within free limits of the API. However, you do require a google account in order to create the key. If that is not palatable, skip the section that makes use of the Speech API.
+	See the README.PDF for details
 
-Instructions to generate a key:
-
-    1. Navigate to the APIs & Services->Credentials panel in Cloud Platform Console.
-    2. Select Create credentials, then select API key from the dropdown menu.
-    3. Click the Create button. ... 
-    4. Once you have the API key, download it and create a JSON file.
-    5. Save to the AIE project
 
 
 <b>Launch Return to Bali</b>
 
-Activate the virtual environment:		
+Activate the virtual environment:
 
 	source ./env/bin/activate
 	
-Run the program:   
+Run the program in the project directory:
 
-	python3 main.py browser debug_mode
+	python3 main.py ubuntu firefox debug 			or 
+	python3 main.py mac chromium no-debug
 
-browser = firefox or chromium; debug_mode = debug or no-debug. The terminal window will display comments. You should see the launch screen in a browser window.
+Specify all three items: OS, browser and debug mode. Supported OS: Ubuntu and Mac OS. 
+Supported browsers: Chromium and Firefox (less stable). To run in debug mode replace’ no-debug’ with ‘debug’. 
 
-	crtl +  /  ctrl – 	increase / decrease zoom factor.
+The terminal window will display comments. You should see the launch screen in a browser window.
 
-Stop the app from the terminal:					
-	ctrl-c
-
-Exit environment at the terminal:				
-	ctrl-d
-
-If you see browser errors .. clear the browsing history: 	
-	ctrl-H
-	clear browsing data
-	clear data
 
 <i>Check the README.pdf file in the repository for a detailed description on how to use the modules.</i>
