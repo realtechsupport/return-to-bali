@@ -20,23 +20,12 @@
   <center>
   <br><br><br>
 
-  <i>... general procedures for field video processing ...</i>
 
   <h2>
   <style> a:link{background-color: #FFFFFF; color: #808080;  padding: 10px 20px; text-align: center; text-decoration: none; display: inline-block; } </style>
 
-  <a href="{{ url_for('prepareview') }}">preprocess field videos or download sample data</a>
+  <a href="{{ url_for('showinfoview') }}">project information</a>
   <br>
-  <a href="{{ url_for('inputview') }}">capture text from field video</a>
-  <br>
-  <a href="{{ url_for('labelimagesview') }}">label images from field video</a>
-  </h2>
-
-  <br><br><br>
-  <i>... modules specific to a field study in Central Bali (Indonesia) ...</i>
-  <br>
-
-  <h2>
   <a href="{{ url_for('contextview') }}">plants represented in the collection: bali-26</a>
   <br>
   <a href="{{ url_for('weathersatview') }}">weather data and satellite views</a>
@@ -52,8 +41,17 @@
   <a href="{{ url_for('testmultiplantclassifiers') }}">evaluate image classifiers on images in the wild</a>
   </h2>
 
-  <br><br>
-  <a href="{{ url_for('showinfoview') }}">project information</a>
+  <br><br><br>
+  <i>... general procedures for field video processing ...</i>
+
+  <h2>
+  <a href="{{ url_for('prepareview') }}">preprocess field videos or download sample data</a>
+  <br>
+  <a href="{{ url_for('inputview') }}">capture text from field video</a>
+  <br>
+  <a href="{{ url_for('labelimagesview') }}">label images from field video</a>
+
+  </h2>
 
 <!----------------------------------------------------------------------------->
 
