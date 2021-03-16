@@ -85,6 +85,40 @@ def autolabel(bars, ax, fs):
 #-------------------------------------------------------------------------------
 def create_weatherplot(referenceweatherdatafile, currentweatherdatafile, destination_folder, add_current_data):
 
+    '''
+    dataset = pandas.read_csv(referenceweatherdatafile, low_memory=False)
+    #get rid of the row below the header
+    dataset.drop(dataset.index[[0,1]], inplace = True)
+    dataset['Date+Time'] = dataset['Dates_only'].astype(str) + ' ' + dataset['Time'].astype(str)
+    dataset['Date+Time'] = pandas.to_datetime(dataset['Date+Time'])
+    dataset = dataset.sort_values(by='Date+Time',ascending=True)
+    dataset.drop_duplicates(subset='Date+Time', keep=False, inplace=True)
+    #print(dataset.head(10))
+    #print(dataset['Dates_only'].tail(10))
+    #print(dataset['Date+Time'].tail(10))
+
+    #NEW - drop the year here
+    dataset['Dates_only'] = dataset['Dates_only'].str[5:]
+
+    fig, ax1 = plt.subplots(figsize=(24,8))
+
+    plt.rcParams['axes.labelsize'] = 16
+
+    ax1.set_facecolor('whitesmoke')
+    ax1.scatter(dataset['Dates_only'], dataset['maxtemp'],  marker='o', s=5.0, alpha = 0.3, linewidths=None, edgecolors = 'none', c='r')
+    ax1.scatter(dataset['Dates_only'], dataset['mintemp'],  marker='o', s=5.0, alpha = 0.2, linewidths=None, edgecolors = 'none', c='b')
+    ax1.set_ylabel('Temp [C]', fontsize = 16)
+
+    ax1.set_yticklabels(dataset['maxtemp'], fontsize = 16)
+    ax1.set_xticklabels(dataset['Dates_only'], fontsize = 14)
+
+    ax2 = ax1.twinx()
+    ax2.scatter(dataset['Dates_only'], dataset['rain'],  marker='o', s=5.0, alpha=1.0, linewidths=None, c='g')
+    ax2.set_ylabel('Rain [mm]', fontsize = 16)
+    ax2.tick_params(axis = 'y', which = 'major', labelsize = 16)
+
+    ax2.xaxis.set_major_locator(plt.MaxNLocator(20))
+    '''
     #weather
     dataset = pandas.read_csv(referenceweatherdatafile, low_memory=False)
     #get rid of the row below the header
@@ -121,6 +155,66 @@ def create_weatherplot(referenceweatherdatafile, currentweatherdatafile, destina
     ttl = ax1.title
     ttl.set_position([.5, 1.05])
 
+
+    '''
+    if(add_current_data == True):
+        results = []
+        with open(currentweatherdatafile, newline='\r\n') as csvfile:
+            data = csv.reader(csvfile, delimiter=',')
+            for row in data:
+                results.append(row)
+
+        for item in results:
+            if('localtime' in item[0]):
+                newdate = item[1]
+            elif('rainfall' in item[0]):
+                nrain = float(item[1])
+            elif('current_temperature' in item[0]):
+                ntemp = float(item[1])
+
+        #map month and day onto the reference data (2018-2019)
+        newdate = newdate.split('_')[0].strip()
+        month = newdate.split('-')[1].strip()
+        day =  newdate.split('-')[2].strip()
+
+        if((int(month) >= 12) and (int(month) < 12)):
+            year = '2018'
+        else:
+            year = '2019'
+
+        ndate = year + '-' + month + '-' + day
+        #print('\nchecking localtime, mapped time: ', newdate, ndate)
+
+        titletext = 'Temperature and rain fail typical of Central Bali (data from the Bali Botanical Garden, year 2018-2019) \n  ' + \
+        ' current data from local weather station in Ubud added with red and green circles'
+
+        weatherplot = referenceweatherdatafile.split('.csv')[0] + '_currentdata.jpg'
+
+        plt.sca(ax1)
+        ax1.scatter(ndate, ntemp, marker='o', s=150, alpha = 1.0, color='darkred', edgecolors='darkred', linewidth=2.0)
+        ax1.set_yticklabels(ntemp, fontsize = 18)
+        plt.annotate(str(ntemp), (ndate, ntemp), textcoords='offset points', color = 'k', xytext=(0,10), ha='center', size=14)
+
+        plt.sca(ax2)
+        ax2.scatter(ndate, nrain, marker='o', s=150, alpha = 1.0, color='darkgreen', edgecolors='darkgreen', linewidth=2.0)
+        plt.annotate(str(nrain), (ndate, nrain), textcoords='offset points', color = 'k', xytext=(0,10), ha='center', size=14)
+
+    else:
+        titletext = 'Temperature and rain fail typical of Central Bali (data from the Bali Botanical Garden, year 2018-2019)'
+        weatherplot = referenceweatherdatafile.split('.csv')[0] + '.jpg'
+
+
+    ax1.set_title(titletext, fontdict={'fontsize': 20, 'fontweight': 'medium'})
+    #ax1.set_ylabel('Temp [C]', fontsize = 18)
+
+    ax1.tick_params(axis='x', labelrotation=60)
+    ttl = ax1.title
+    ttl.set_position([.5, 1.05])
+
+    plt.xticks(ha='right')
+    plt.xticks(fontsize = 16)
+
+    '''
     fig.subplots_adjust(top=0.85)
     fig.subplots_adjust(bottom=0.2)
 
@@ -146,32 +240,16 @@ def create_weather_flora_events_plot(referenceweatherdatafile, seasonsdatafilepa
     dataset = dataset.sort_values(by='Date+Time',ascending=True)
     dataset.drop_duplicates(subset='Date+Time', keep=False, inplace=True)
 
-    #NEW - drop the year here
-    dataset['Dates_only'] = dataset['Dates_only'].str[5:]
-
     #events
     fdataset = pandas.read_csv(festivalsdatafilepath, low_memory=False)
-    fdataset['start'] = pandas.to_datetime(fdataset['start'], format='%Y-%m-%d')
-    fdataset['end'] = pandas.to_datetime(fdataset['end'], format='%Y-%m-%d')
-
-    #fdataset['start'] = pandas.to_datetime(fdataset['start'])
-    #fdataset['end'] = pandas.to_datetime(fdataset['end'])
-
-    #NEW - drop the year here
-    #fdataset['start'] = fdataset['start'].dt.strftime('%m-%d')
-    #fdataset['end'] =  fdataset['end'].dt.strftime('%m-%d')
-
-    #-------------------------------------------------
+    fdataset['start'] = pandas.to_datetime(fdataset['start'])
+    fdataset['end'] = pandas.to_datetime(fdataset['end'])
 
     #seasons
     sdataset = pandas.read_csv(seasonsdatafilepath, low_memory=False)
     sdataset = (sdataset.filter( ['plant', 'fruiting_start', 'fruiting_end'])).dropna()
-    sdataset['fruiting_start'] = pandas.to_datetime(sdataset['fruiting_start'], format='%Y-%m-%d')
-    sdataset['fruiting_end'] = pandas.to_datetime(sdataset['fruiting_end'], format='%Y-%m-%d')
-    #sdataset['fruiting_start'] = pandas.to_datetime(sdataset['fruiting_start'])
-    #sdataset['fruiting_end'] = pandas.to_datetime(sdataset['fruiting_end'])
-
-
+    sdataset['fruiting_start'] = pandas.to_datetime(sdataset['fruiting_start'])
+    sdataset['fruiting_end'] = pandas.to_datetime(sdataset['fruiting_end'])
 
     #PLOTS --------------------------------------------------------------------
 
