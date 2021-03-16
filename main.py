@@ -29,6 +29,7 @@ from utilities import *
 from similarities import *
 from pyt_utilities import *
 from maps_sats import *
+from collect_weatherdata_Bali import *
 #-------------------------------------------------------------------------------
 
 satref_url = 'https://filedn.com/lqzjnYhpY3yQ7BdfTulG1yY/AIE_maps/'
@@ -38,7 +39,7 @@ seasons_url = 'https://filedn.com/lqzjnYhpY3yQ7BdfTulG1yY/AIE_context/seasons.cs
 events_url = 'https://filedn.com/lqzjnYhpY3yQ7BdfTulG1yY/AIE_context/events.csv'
 interview_url = 'https://filedn.com/lqzjnYhpY3yQ7BdfTulG1yY/AIE_context/darmaja_interview_1min.webm'
 weatherref_file = 'refweatherdata.csv'
-weathercurrent_file = 'AIE_weather.csv'
+weathercurrent_file = 'weather.csv'
 
 #-------------------------------------------------------------------------------
 app = Flask(__name__, template_folder="templates")
@@ -747,9 +748,14 @@ def weathersatview():
 
     downloadweather_check(weathercurrent_url, weatherref_url, weatherref_file, wcurtarget, location, wreftarget)
 
+    #New
+    station_loc = 'Ubud'
+    get_local_weather(station_loc)
+
     #now produce the reference image and current data, copy to static folder
-    weatherplotname = create_weatherplot(wreftarget, wcurtarget, dest_folder, add_current_data = True)
+    weatherplotname = create_weatherplot(wreftarget, wcurtarget, dest_folder, add_current_data = False)
     weathertablename = create_weathertable(wcurtarget, dest_folder)
+    #weathertablename = create_weathertable(weathercurrent_file, dest_folder)
 
     #get the sat-map asset and move to static folder; add title
     task = loop.create_task(get_map_sat(app, satref_url))

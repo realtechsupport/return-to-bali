@@ -1,9 +1,0 @@
-humidity [%],94
-max_temperature [C],25.1
-min_temperature [C],24.9
-current_temperature [C],25.1
-rainfall [mm],0.0
-localtime,2020-12-30_00:59
-timezone,(+8GMT)
-source,ubudweather.com
-timestamp,2020-12-29_12:00
