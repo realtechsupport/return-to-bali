@@ -59,7 +59,7 @@ Cd to to the ai-ethnobotany directory again. Install Requirements and Dependenci
 
 Generate an STT key (optional)
 
-	See the README.PDF for details
+	See the README_details.pdf for details
 
 
 
@@ -80,4 +80,4 @@ Supported browsers: Chromium and Firefox (less stable). To run in debug mode rep
 The terminal window will display comments. You should see the launch screen in a browser window.
 
 
-<i>Check the README.pdf file in the repository for a detailed description on how to use the modules.</i>
+<i>Check the README_details.pdf file in the repository for a detailed description on how to use the modules.</i>
