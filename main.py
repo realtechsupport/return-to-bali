@@ -34,7 +34,6 @@ from collect_weatherdata_Bali import *
 
 satref_url = 'https://filedn.com/lqzjnYhpY3yQ7BdfTulG1yY/AIE_maps/'
 weatherref_url = 'https://filedn.com/lqzjnYhpY3yQ7BdfTulG1yY/AIE_weather/BaliBotanicalGardenWeather_Ref.csv'
-weathercurrent_url = 'https://filedn.com/lqzjnYhpY3yQ7BdfTulG1yY/AIE_weather/AIE_weather.csv'
 seasons_url = 'https://filedn.com/lqzjnYhpY3yQ7BdfTulG1yY/AIE_context/seasons.csv'
 events_url = 'https://filedn.com/lqzjnYhpY3yQ7BdfTulG1yY/AIE_context/events.csv'
 interview_url = 'https://filedn.com/lqzjnYhpY3yQ7BdfTulG1yY/AIE_context/darmaja_interview_1min.webm'
@@ -228,294 +227,12 @@ def outputview():
     return render_template(template, form=form, result=s_results, sresult=s_searchresults, showvideo=s_filename)
 
 #-------------------------------------------------------------------------------
-@app.route('/checkimagesview',  methods=['GET', 'POST'])
-def checkimagesview():
-    form = Checkimagesinputs()
-    current_video = ''
-    category = ''
-    dfiles = ''
-    template = 'checkimagesview.html'
-
-    videoname = session.get('s_videoname', None)
-    current_video = videoname.split('/')[-1]
-    category = session.get('s_category', None)
-    images = os.listdir(app.config['IMAGES'] + category)
-
-    lastentry_d = 0; firstentry_s = 0
-
-
-    if (request.method == 'POST'):
-        ssim_min = form.ssim_min.data;
-        lum_max = form.lum_max.data;
-        lum_min = form.lum_min.data;
-
-        if("add" in request.form):
-            destination = os.path.join(app.config['COLLECTION'], category)
-
-            if not os.path.exists(destination):
-                os.makedirs(destination)
-
-            #find the highest number in the destination and the lowest in the source
-            dfiles = glob.glob(destination + '/*.jpg')
-            source = os.path.join(app.config['IMAGES'], category)
-            sfiles = glob.glob(source + '/*.jpg')
-
-            try:
-                dfiles = [i.split('/')[-1] for i in dfiles]
-                dfiles = [i.split('.')[0] for i in dfiles]
-                dfiles = sorted([int(i) for i in dfiles])
-                lastentry_d = dfiles[-1]
-            except:
-                lastentry_d = 0
-
-            try:
-                ssfiles = [i.split('/')[-1] for i in sfiles]
-                ssfiles = [i.split('.')[0] for i in ssfiles]
-                ssfiles = sorted([int(i) for i in ssfiles])
-                firstentry_s = ssfiles[0]
-            except:
-                firstentry_s = 0
-
-            if(firstentry_s < lastentry_d):
-                print('first entry source smaller than in last in destination...renaming source images')
-                rename_all(source, lastentry_d)
-
-            #copy the files
-            rfiles = glob.glob(source + '/*.jpg')
-            rfiles = sorted(rfiles)
-            for file in rfiles:
-                shutil.copy(file, destination)
-            print('COPIED images to collection')
-
-        elif("divergent" in request.form):
-            print('removing fuzzy, over and underexposed images...')
-            try:
-                images2remove = session.get('s_images2remove', None)
-                imlist = json.loads(images2remove)
-                im_loc = os.path.join(app.config['IMAGES'], category) + '/'
-                im_ref =  imlist[-1]
-                nbad = remove_fuzzy_over_under_exposed(im_ref, im_loc, images, ssim_min, lum_max, lum_min)
-                print('removed ' +  str(nbad) + ' images...')
-            except:
-                print('no images selected to create reference...')
-
-        elif("delete" in request.form):
-            print('removing highlighted images...')
-            try:
-                images2remove = session.get('s_images2remove', None)
-                imlist = json.loads(images2remove)
-                for im in imlist:
-                    im_s = os.path.join(app.config['IMAGES'], category, im)
-                    print(im_s)
-                    try:
-                        os.remove(im_s)
-                    except:
-                        print('image already removed')
-            except:
-                print('no images selected for removal...')
-
-        elif("remove" in request.form):
-            try:
-                print('delelting the entire collection !')
-                shutil.rmtree(app.config['COLLECTION'])
-            except:
-                pass
-            if not os.path.exists(app.config['COLLECTION']):
-                os.makedirs(app.config['COLLECTION'])
-
-        elif("archive" in request.form):
-            #shutil.make_archive(app.config['COLLECTION'], 'zip', app.config['COLLECTION'])... works from commandline...
-            zfile = 'collection.zip'; timezone = 'America/New_York'
-            stamped_zfile = create_timestamp(zfile, timezone)
-            zipit(app.config['COLLECTION'], stamped_zfile)
-            source = os.path.join(app.config['COLLECTION'], stamped_zfile)
-            destination = os.path.join(app.config['ARCHIVE'], stamped_zfile)
-            shutil.move(source, destination)
-
-        elif("context" in request.form):
-            pass
-
-        elif("share" in request.form):
-            pass
-
-        #left click on mouse collects the images
-        else:
-            try:
-                imagenames = request.form['data']
-                session['s_images2remove'] = imagenames
-            except ValueError:
-                pass
-
-    return render_template(template, form=form, category = category, videoname = current_video, images = images)
-
-#-------------------------------------------------------------------------------
-@app.route('/checkimagesview/<filename>')
-def send_image(filename):
-    category = session.get('s_category', None)
-    location = 'images/' + category
-    return send_from_directory(location, filename)
-
-#-------------------------------------------------------------------------------
-@app.route('/labelimagesview', methods=['GET', 'POST'])
-def labelimagesview():
-    form = VideoLabelInputs()
-    revsource = ''
-    videoname = ''
-    file = ''
-    category = ''
-    template = 'labelimagesview.html'
-
-    if (request.method == 'POST'):
-        if("load" in request.form):
-            file = request.files['vid']
-            videoname = secure_filename(file.filename).lower()
-            revsource = os.path.join(app.config['STATIC'], videoname)
-            file.save(revsource)
-
-        elif("bulk" in request.form):
-            print('...labelling bulk category')
-            framerate = form.framerate.data
-            file = request.files['vid']
-            videoname= secure_filename(file.filename)
-            videonamepath = os.path.join(app.config['TMP'], videoname)
-            file.save(videonamepath)
-            category = form.folder.data
-            savepath = os.path.join(app.config['IMAGES'],  category) + '/'
-            create_images_from_video(savepath, category, videonamepath, framerate)
-            print('FINISHED bulk saving')
-
-    session['s_videoname'] = videoname
-    session['s_category'] = category
-
-
-    return render_template(template, form=form, showvideo=videoname)
-
-#-------------------------------------------------------------------------------
 @app.route('/testclassifiers', methods=['GET', 'POST'])
 def testclassifiers():
     form = TestClassifiers()
     choice = ''; input = ''; images = ''; files = ''; c_classifier = ''
     result = ''; moreresults = ''; tp_vals = []
     template = 'testclassifiers.html'
-
-    if (request.method == 'POST'):
-        testcollection = form.testcollection.data
-        print('test collection is: ', testcollection)
-        location = os.path.join(app.config['FIND'], testcollection)
-        zfile = os.path.join(app.config['FIND'], testcollection) + '.zip'
-
-        # -------------------------------------
-        # move section to utilities
-        try:
-            path, dirs, files = next(os.walk(location))
-        except:
-            pass
-
-        if(len(files) == 0):
-            if(testcollection == 'bali26samples'):
-                archive = bali26_samples_zip
-            elif(testcollection == 'balimixedplants'):
-                archive = bali_mixedplants_zip
-            else:
-                archive = bali26_samples_zip
-
-            '''
-            print('this is the archive: ', archive)
-            print('this is the testcollection', testcollection)
-            '''
-            print('downloading the samples...')
-            wget.download(archive, zfile)
-            shutil.unpack_archive(zfile, app.config['FIND'], 'zip')
-            os.remove(zfile)
-        #----------------------------------
-
-        images = os.listdir(location)
-
-        if("display" in request.form):
-            session['s_testcollection'] = testcollection
-
-        elif(("classify" in request.form) and (session.get('s_choices', None) != '' )):
-            classifier = form.classifier.data
-            session['s_testcollection'] = testcollection
-
-            if(testcollection == 'balimixedplants'):
-                class_names = bali26_class_names
-
-                if('Resnet152'.lower() in classifier):
-                    archive = bali26_resnet152
-                elif('Resnext50'.lower() in classifier):
-                    archive = bali26_rexnext50
-                elif('Alexnet'.lower() in classifier):
-                    archive = bali26_alexnet
-                else:
-                    archive = bali26_alexnet
-
-
-            if(testcollection == 'bali26samples'):
-                class_names = bali26_class_names
-
-                if('Resnet152'.lower() in classifier):
-                    archive = bali26_resnet152
-                elif('Resnext50'.lower() in classifier):
-                    archive = bali26_rexnext50
-                elif('Alexnet'.lower() in classifier):
-                    archive = bali26_alexnet
-                else:
-                    archive = bali26_alexnet
-
-
-            path, dirs, files = next(os.walk(app.config['MODELS']))
-            if(classifier in files):
-                pass
-            else:
-                print('getting the matching trained classifier...')
-                modelname = archive.split('/')[-1]
-                wget.download(archive, (os.path.join(app.config['MODELS'], modelname)))
-
-
-            try:
-                tchoices = session.get('s_choices', None)
-                choice = json.loads(tchoices)
-                image_path = os.path.join(app.config['FIND'],  testcollection, choice)
-                pclassifier = os.path.join(app.config['MODELS'], classifier)
-                processor='cpu'; tk=3; threshold=90;
-                model = load_checkpoint(pclassifier, processor)
-                predictions, percentage, outcategory = predict_image(image_path, model, predict_transform, class_names, tk, processor)
-                tp_indeces = predictions[1].tolist()[0]
-                for k in tp_indeces:
-                    tp_vals.append(class_names[k])
-
-                input = 'selected image: ' + choice
-                c_classifier = 'selected classifier: ' + classifier
-                result = 'best prediction: ' + outcategory + ' (with confidence level ' + percentage + '%)'
-                moreresults = 'top three predictions: ' + str(tp_vals)
-
-            except:
-                print('... display images before you classify and pick an image with left mouse click... ')
-                return redirect(url_for('testclassifiers'))
-
-        elif("context" in request.form):
-            images = ''
-
-        #left click on mouse collects the images
-        else:
-            try:
-                imagenames = request.form['data']
-                session['s_choices'] = imagenames
-            except:
-                print('no image selected to classify')
-                pass
-
-    return render_template(template, form=form, images=images, result=result, moreresults=moreresults, classifier=c_classifier, input=input)
-
-
-#-------------------------------------------------------------------------------
-@app.route('/testmultiplantclassifiers', methods=['GET', 'POST'])
-def testmultiplantclassifiers():
-    form = TestClassifiers()
-    choice = ''; input = ''; images = ''; files = ''; c_classifier = ''
-    result = ''; moreresults = ''; tp_vals = []
-    template = 'testmultiplantclassifiers.html'
 
     if (request.method == 'POST'):
         testcollection = form.testcollection.data
@@ -649,7 +366,6 @@ def trainclassifiers():
             training_percentage = form.training_percentage.data;
             pretrained = form.pretrained.data; normalization = form.normalization.data;
 
-            #-----------
             #location = app.config['FIND']
             #prepare_collection(testcollection, location)
 
@@ -686,7 +402,7 @@ def trainclassifiers():
                     exit()
 
             shutil.unpack_archive(zfile, app.config['FIND'], 'zip')
-            #------------
+
 
             path, categories, files = next(os.walk(os.path.join(app.config['FIND'], testcollection)))
 
@@ -746,7 +462,7 @@ def weathersatview():
     wreftarget = os.path.join(location, weatherref_file)
     wcurtarget = os.path.join(location, weathercurrent_file)
 
-    downloadweather_check(weathercurrent_url, weatherref_url, weatherref_file, wcurtarget, location, wreftarget)
+    downloadweather_check(weatherref_url, weatherref_file, wcurtarget, location, wreftarget)
 
     #New
     station_loc = 'Ubud'
@@ -782,7 +498,8 @@ def floraclimateview():
     wreftarget = os.path.join(location, weatherref_file)
     wcurtarget = os.path.join(location, weathercurrent_file)
 
-    downloadweather_check(weathercurrent_url, weatherref_url, weatherref_file, wcurtarget, location, wreftarget)
+    downloadweather_check(weatherref_url, weatherref_file, wcurtarget, location, wreftarget)
+
     asset_saved = downloadassets_check(seasons_url, location, seasons)
     print('\ngot the asset: ', asset_saved)
     asset_saved = downloadassets_check(events_url, location, festivals)
@@ -793,50 +510,6 @@ def floraclimateview():
     weathereventsfloraname = create_weather_flora_events_plot(wreftarget, seasonsdatafilepath, festivalsdatafilepath, dest_folder)
 
     return render_template(template, multiplot=weathereventsfloraname)
-
-#-------------------------------------------------------------------------------
-@app.route('/prepareview', methods=['GET', 'POST'])
-def prepareview():
-    form = PrepareInputs()
-    template = 'prepareview.html'
-    chunkresult = '...'
-    filename = ''
-
-    if (request.method == 'POST'):
-        if("samples" in request.form):
-            zfile = os.path.join(app.config['TESTS'], 'tests.zip')
-            lzfile = 'tests.zip'
-            path, dirs, files = next(os.walk(app.config['TESTS']))
-            if(lzfile in files):
-                print('already downloaded the sample data..')
-                pass
-            else:
-                try:
-                    wget.download(tests_zip, zfile)
-                    shutil.unpack_archive(zfile, app.config['TESTS'], 'zip')
-                except:
-                    print('can not get the samples...')
-                    return redirect(url_for('prepareview'))
-
-        elif("chunk" in request.form):
-            chunksize = form.chunk.data
-            try:
-                file = request.files['vid']
-                filename = secure_filename(file.filename).lower()
-                #print(filename, chunksize)
-                destination = os.path.join(app.config['TMP'], filename)
-                file.save(destination)
-                location = app.config['TMP']
-                nfiles = chunk_large_videofile(destination, chunksize, location)
-                chunkresult = 'result: ' + str(nfiles) + ' files of max ' + str(chunksize) + ' min...'
-            except:
-                print('Something went wrong...file less than 1 min long? No file chosen? Supported fromats are .webm and .mp4 only. Try again...')
-                return redirect(url_for('prepareview'))
-
-        else:
-            print('SOMETHING ELSE')
-
-    return render_template(template, form=form, result=chunkresult)
 
 #-------------------------------------------------------------------------------
 @app.route('/integratedagricultureview', methods=['GET', 'POST'])

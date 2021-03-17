@@ -97,7 +97,7 @@ def create_weatherplot(referenceweatherdatafile, currentweatherdatafile, destina
     #NEW - drop the year here
     dataset['Dates_only'] = dataset['Dates_only'].str[5:]
 
-    fig, ax1 = plt.subplots(figsize=(24,8))
+    fig, ax1 = plt.subplots(figsize=(24,10))
     #ax1 - weather
     ax1.set_facecolor('whitesmoke')
     ax1.scatter(dataset['Dates_only'], dataset['maxtemp'],  marker='o', s=5.0, alpha = 0.3, linewidths=None, edgecolors = 'none', c='r')
@@ -175,7 +175,7 @@ def create_weather_flora_events_plot(referenceweatherdatafile, seasonsdatafilepa
 
     #PLOTS --------------------------------------------------------------------
 
-    fig, (ax1, ax2, ax3) = plt.subplots(3, figsize=(24,24))
+    fig, (ax1, ax2, ax3) = plt.subplots(3, figsize=(24,30))
 
     #ax1 - weather
     ax1.set_facecolor('whitesmoke')
@@ -234,7 +234,7 @@ def create_weather_flora_events_plot(referenceweatherdatafile, seasonsdatafilepa
     ax3.grid()
     ax3.tick_params(axis='both', which='major', labelsize=16)
     ax3.set_xlim([date(2018, 11, 15), date(2019, 12, 31)])
-    titletext = 'Flowering seasons of the plants in the bali-26 dataset'
+    titletext = 'Fruiting seasons of the plants in the bali-26 dataset'
     ax3.set_title(titletext, fontdict={'fontsize': 18, 'fontweight': 'medium'})
     ttl = ax3.title
     ttl.set_position([.5, 1.05])
