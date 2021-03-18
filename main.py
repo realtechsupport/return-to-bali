@@ -34,6 +34,7 @@ from collect_weatherdata_Bali import *
 
 satref_url = 'https://filedn.com/lqzjnYhpY3yQ7BdfTulG1yY/AIE_maps/'
 weatherref_url = 'https://filedn.com/lqzjnYhpY3yQ7BdfTulG1yY/AIE_weather/BaliBotanicalGardenWeather_Ref.csv'
+weathercurrent_url = 'https://filedn.com/lqzjnYhpY3yQ7BdfTulG1yY/AIE_weather/AIE_weather.csv'
 seasons_url = 'https://filedn.com/lqzjnYhpY3yQ7BdfTulG1yY/AIE_context/seasons.csv'
 events_url = 'https://filedn.com/lqzjnYhpY3yQ7BdfTulG1yY/AIE_context/events.csv'
 interview_url = 'https://filedn.com/lqzjnYhpY3yQ7BdfTulG1yY/AIE_context/darmaja_interview_1min.webm'
@@ -462,7 +463,8 @@ def weathersatview():
     wreftarget = os.path.join(location, weatherref_file)
     wcurtarget = os.path.join(location, weathercurrent_file)
 
-    downloadweather_check(weatherref_url, weatherref_file, wcurtarget, location, wreftarget)
+    #downloadweather_check(weatherref_url, weatherref_file, wcurtarget, location, wreftarget)
+    downloadweather_check(weathercurrent_url, weatherref_url, weatherref_file, wcurtarget, location, wreftarget)
 
     #New
     station_loc = 'Ubud'
@@ -498,8 +500,9 @@ def floraclimateview():
     wreftarget = os.path.join(location, weatherref_file)
     wcurtarget = os.path.join(location, weathercurrent_file)
 
-    downloadweather_check(weatherref_url, weatherref_file, wcurtarget, location, wreftarget)
-
+    #downloadweather_check(weatherref_url, weatherref_file, wcurtarget, location, wreftarget)
+    downloadweather_check(weathercurrent_url, weatherref_url, weatherref_file, wcurtarget, location, wreftarget)
+    
     asset_saved = downloadassets_check(seasons_url, location, seasons)
     print('\ngot the asset: ', asset_saved)
     asset_saved = downloadassets_check(events_url, location, festivals)

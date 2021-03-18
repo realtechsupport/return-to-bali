@@ -163,15 +163,13 @@ def create_weather_flora_events_plot(referenceweatherdatafile, seasonsdatafilepa
 
     #-------------------------------------------------
 
-    #seasons
+    #seasons - check the formatting details of the reference file ... seasons.csv file on PCloud
     sdataset = pandas.read_csv(seasonsdatafilepath, low_memory=False)
     sdataset = (sdataset.filter( ['plant', 'fruiting_start', 'fruiting_end'])).dropna()
     sdataset['fruiting_start'] = pandas.to_datetime(sdataset['fruiting_start'], format='%Y-%m-%d')
     sdataset['fruiting_end'] = pandas.to_datetime(sdataset['fruiting_end'], format='%Y-%m-%d')
-    #sdataset['fruiting_start'] = pandas.to_datetime(sdataset['fruiting_start'])
-    #sdataset['fruiting_end'] = pandas.to_datetime(sdataset['fruiting_end'])
-
-
+    #sdataset['fruiting_start'] = pandas.to_datetime(sdataset['fruiting_start'], format='%d-%m-%y')
+    #sdataset['fruiting_end'] = pandas.to_datetime(sdataset['fruiting_end'], format='%d-%m-%y')
 
     #PLOTS --------------------------------------------------------------------
 

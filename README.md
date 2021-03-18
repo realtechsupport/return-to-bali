@@ -26,6 +26,10 @@ Return to Bali runs on Linux and Mac OS under Python3 and Flask with Chromium or
 Recommended browser: Chromium.
 
 
+<br>Project members</b>
+
+Raunaq Jain, Wawan Sujarwo, Varun Chandola, Marc Böhlen
+
 
 <b>Software Installation</b>
 

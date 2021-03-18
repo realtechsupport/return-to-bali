@@ -97,8 +97,8 @@ def rename_all(source, offset):
         os.rename(tsrc, dst)
 
 #-------------------------------------------------------------------------------
-def downloadweather_check(referenceurl, referencefile, target, location, targetfile):
-#def downloadweather_check(currenturl, referenceurl, referencefile, target, location, targetfile):
+#def downloadweather_check(referenceurl, referencefile, target, location, targetfile):
+def downloadweather_check(currenturl, referenceurl, referencefile, target, location, targetfile):
     try:
         file = wget.download(currenturl, target)
         if os.path.exists(target):
