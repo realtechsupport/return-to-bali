@@ -89,12 +89,11 @@ def index():
     template = 'index.html'
     return render_template(template)
 
-#------------------------------------------------------------------------------
-
 #-------------------------------------------------------------------------------
 @app.route('/testclassifiers', methods=['GET', 'POST'])
 def testclassifiers():
     form = TestClassifiers()
+    comment = ''
     choice = ''; input = ''; images = ''; files = ''; c_classifier = ''
     result = ''; moreresults = ''; tp_vals = []
     template = 'testclassifiers.html'
@@ -188,8 +187,22 @@ def testclassifiers():
 
                 input = 'selected image: ' + choice
                 c_classifier = 'selected classifier: ' + classifier
-                #HERE the new language
 
+                #HERE the new language ---------------------------
+                f_percentage = float(percentage)
+                if(f_percentage > 95):
+                    comment = 'This classifier seems very confident of the validity of the result.'
+                elif((f_percentage <= 95) and (f_percentage > 90)):
+                    comment = 'This classifier seems confident of the validity of the result.'
+                elif((f_percentage <= 90) and (f_percentage > 80)):
+                    comment = 'This classifier seems somewhat unsure of the validity of the result.'
+                elif((f_percentage <= 80) and (f_percentage > 70)):
+                    comment = 'This classifier is not at all confident of the validity of the result.'
+                elif(f_percentage <= 70):
+                    comment = 'This classifier has insufficient confidence in the validity of the result.'
+                else:
+                    comment = ''
+                #--------------------------------------------------
 
                 result = 'best prediction: ' + outcategory + ' (with confidence level ' + percentage + '%)'
                 moreresults = 'top three predictions: ' + str(tp_vals)
@@ -210,7 +223,7 @@ def testclassifiers():
                 print('no image selected to classify')
                 pass
 
-    return render_template(template, form=form, images=images, result=result, moreresults=moreresults, classifier=c_classifier, input=input)
+    return render_template(template, form=form, images=images, result=result, comment=comment, moreresults=moreresults, classifier=c_classifier, input=input)
 
 #-------------------------------------------------------------------------------
 @app.route('/testclassifiers/<filename>')

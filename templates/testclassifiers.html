@@ -49,6 +49,7 @@
  <form method="POST" enctype="multipart/form-data">
  <br><br>
  <center>
+
  <table>
  {% for field in form if field.widget.input_type != 'hidden' %}
 
@@ -74,7 +75,8 @@
   <fieldset>
     <legend>classification results</legend>
      <p>
-       <div class='form-text'
+       <div class='form-text', text-align='center'
+
          <textarea rows="50" cols="20" placeholder = "Output of the classification attempt">
           {{input}}
           <br><br>
@@ -82,13 +84,17 @@
           <br><br>
           {{result}}
           <br><br>
+          {{comment}}
+          <br><br>
           {{moreresults}}
         </textarea>
+
       </div>
      </p>
   </fieldset>
 
  </center>
+
 
 <hr>
 {% for image in images %}
