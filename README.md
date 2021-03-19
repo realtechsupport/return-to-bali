@@ -6,11 +6,16 @@ Return to Bali’s goal is to facilitate the creation of under-represented knowl
 
 While Bali has been subject to numerous exploitative practices, this project aims to bend machine learning to collect data responsibly and to assess if machine learning might help maintain the body of local ecological knowledge that has been documented as declining specifically amongst Balinese youth. 
 
-Return to Bali includes a dataset, bali-26, produced from field videos documenting 26 ethnobotanically significant plants of South East Asia, several of which are indigenous to the island of Bali. The videos show the plants in multiple stages of growth and include fruits, leaves, branches and bark where applicable, from multiple locations within the field study site of Central Bali and under varying lighting conditions.
+Return to Bali includes a dataset, bali-26, produced from field videos documenting 26 ethnobotanically significant plants of South East Asia, several of which are
+indigenous to the island of Bali. The videos show the plants in multiple stages of growth and include fruits, leaves, branches and bark where applicable, from
+multiple locations within the field study site of Central Bali and under varying lighting conditions. It also includes several instances of some of the plants (such as snakefruit).
+at local markets.
 
 The high definition mobile phone video files shot by data collectors in the field were converted to labeled images with the <a href="https://github.com/realtechsupport/c-plus-r"> Catch & Release </a> software package.
 
-The software modules included here allow one to parse text from video interviews and to experiment with image classification approaches on the bali-26 data set, the first small collection of ethnobotanically significant plants of South East Asia made amendable to neural network based image classification. The project demonstrates that even the best machine learning algorithms struggle to understand  the visual complexity contained in this image set.
+The bali-26 data set is the first (minor) collection of ethnobotanically significant plants of South East Asia made amendable to neural network based image classification. As such, it
+expands the domain of machine learning to include forms of knowledge that have not yet been represented. And on a purely technical level, the project demonstrates
+that even the best machine learning algorithms struggle to understand the visual complexity contained in the rich flora of Bali captured in the wild.
 
 <a href="http://www.realtechsupport.org/new_works/return2bali.html">Additional Documentation</a>
 
