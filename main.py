@@ -34,10 +34,7 @@ from collect_weatherdata_Bali import *
 
 satref_url = 'https://filedn.com/lqzjnYhpY3yQ7BdfTulG1yY/AIE_maps/'
 weatherref_url = 'https://filedn.com/lqzjnYhpY3yQ7BdfTulG1yY/AIE_weather/BaliBotanicalGardenWeather_Ref.csv'
-<<<<<<< HEAD
 weathercurrent_url = 'https://filedn.com/lqzjnYhpY3yQ7BdfTulG1yY/AIE_weather/AIE_weather.csv'
-=======
->>>>>>> 4d40017b3668cf2d5a6563faa0a06d48e7a05f22
 seasons_url = 'https://filedn.com/lqzjnYhpY3yQ7BdfTulG1yY/AIE_context/seasons.csv'
 events_url = 'https://filedn.com/lqzjnYhpY3yQ7BdfTulG1yY/AIE_context/events.csv'
 interview_url = 'https://filedn.com/lqzjnYhpY3yQ7BdfTulG1yY/AIE_context/darmaja_interview_1min.webm'
@@ -93,142 +90,6 @@ def index():
     return render_template(template)
 
 #------------------------------------------------------------------------------
-@app.route('/inputview', methods=['GET', 'POST'])
-def inputview():
-    form = GetTextinputs()
-    template = 'inputview.html'
-    results = []
-    searchresults = []
-    revsource = ''
-    filename = ''
-    upl = False
-
-    if (request.method == 'POST'):
-        if("view" in request.form):
-            temp = session.get('s_filename', None)
-            if(temp == ''):
-                s_filename = ''
-            else:
-                s_filename = temp
-
-            file = request.files['vid']
-            filename = secure_filename(file.filename).lower()
-            revsource = os.path.join(app.config['STATIC'], filename)
-
-            if(s_filename == None):
-                print('no file yet..')
-                pass
-            elif((s_filename.split('.')[0]) == filename.split('.')[0]):
-                m = os.path.join(app.config['STATIC'], s_filename)
-                if(os.path.isfile(m)):
-                    upl = True;
-                    print('file already uploaded')
-
-            if(upl == False):
-                print('.... uploading .....')
-                file.save(revsource)
-
-                videoformat = (filename.split('.')[1]).lower()
-                print('this is the videoformat: ', videoformat)
-
-            session['s_filename'] = filename
-        #------------------------------------------
-        elif("capture" in request.form):
-            temp = session.get('s_filename', None)
-            if(temp == ''):
-                s_filename = ''
-            else:
-                s_filename = temp
-
-            file = request.files['vid']
-            filename = secure_filename(file.filename).lower()
-            revsource = os.path.join(app.config['STATIC'], filename)
-
-            if(s_filename == None):
-                print('no file yet..')
-                pass
-            elif((s_filename.split('.')[0]) == filename.split('.')[0]):
-                m = os.path.join(app.config['STATIC'], s_filename)
-                if(os.path.isfile(m)):
-                    upl = True;
-                    print('file already uploaded')
-
-            if(upl == False):
-                print('.... uploading .....')
-                file.save(revsource)
-
-                videoformat = (filename.split('.')[1]).lower()
-                print('this is the videoformat: ', videoformat)
-
-            destination = os.path.join(app.config['TMP'], filename)
-            shutil.copyfile(revsource, destination)
-
-            session['s_filename'] = filename
-            s_h = 0
-            s_m = form.s_m.data; s_s = form.s_s.data
-            e_h = 0
-            e_m = form.e_m.data; e_s = form.e_s.data
-
-            start_time = s_s + 60*s_m + 3600*s_h
-            end_time = e_s + 60*e_m + 3600*e_h
-            duration = end_time - start_time
-            start = seconds_to_hms(start_time); end = seconds_to_hms(end_time)
-
-            if('searchterm' in form.search.data):
-                searchterm = ''
-            else:
-                searchterm = form.search.data
-
-            try:
-                auth_file = request.files['auth']
-                auth_filename = secure_filename(auth_file.filename).lower()
-                authsource = os.path.join(app.config['STATIC'], auth_filename)
-                auth_file.save(authsource)
-            except:
-                print('no credential file selected - cannot capture text without a valid [.json] credential ')
-                return redirect(url_for('inputview'))
-
-            #now get the text from the set segment
-            os.chdir(app.config['TMP'])
-            maxattempts = 5
-            results, searchresults = extract_text(app, destination, form.lang.data, start_time, duration, form.chunk.data, form.conf.data, maxattempts, searchterm, authsource)
-            print('\n finished extracting text from video..\n')
-            #session variables limited to 4kb !!
-            session['s_results'] = results; session['s_searchresults'] = searchresults
-
-            for line in results:
-                print (line)
-
-            template = 'outputview.html'
-            return redirect(url_for('outputview'))
-
-    else:
-        results = None
-        searchresults = None
-
-    return(render_template(template, form=form, result=results, sresult=searchresults, showvideo=filename))
-
-#-------------------------------------------------------------------------------
-@app.route('/outputview', methods=['GET', 'POST'])
-def outputview():
-    form = DownloadInputs()
-    template = 'outputview.html'
-
-    s_results = session.get('s_results', None)
-    s_searchresults = session.get('s_searchresults', None)
-    s_filename = session.get('s_filename', None)
-
-    if (request.method == 'POST'):
-        print('inside the download option..')
-        template = 'index.html'
-        if("download" in request.form):
-            resultspath = os.path.join(current_app.root_path, app.config['TMP'])
-            for name in glob.glob(resultspath + '*s2tlog*'):
-                log = name
-
-            return send_file(log, as_attachment=True)
-
-    return render_template(template, form=form, result=s_results, sresult=s_searchresults, showvideo=s_filename)
 
 #-------------------------------------------------------------------------------
 @app.route('/testclassifiers', methods=['GET', 'POST'])
@@ -327,6 +188,9 @@ def testclassifiers():
 
                 input = 'selected image: ' + choice
                 c_classifier = 'selected classifier: ' + classifier
+                #HERE the new language
+
+
                 result = 'best prediction: ' + outcategory + ' (with confidence level ' + percentage + '%)'
                 moreresults = 'top three predictions: ' + str(tp_vals)
 
@@ -466,12 +330,8 @@ def weathersatview():
     wreftarget = os.path.join(location, weatherref_file)
     wcurtarget = os.path.join(location, weathercurrent_file)
 
-<<<<<<< HEAD
     #downloadweather_check(weatherref_url, weatherref_file, wcurtarget, location, wreftarget)
     downloadweather_check(weathercurrent_url, weatherref_url, weatherref_file, wcurtarget, location, wreftarget)
-=======
-    downloadweather_check(weatherref_url, weatherref_file, wcurtarget, location, wreftarget)
->>>>>>> 4d40017b3668cf2d5a6563faa0a06d48e7a05f22
 
     #New
     station_loc = 'Ubud'
@@ -507,14 +367,9 @@ def floraclimateview():
     wreftarget = os.path.join(location, weatherref_file)
     wcurtarget = os.path.join(location, weathercurrent_file)
 
-<<<<<<< HEAD
     #downloadweather_check(weatherref_url, weatherref_file, wcurtarget, location, wreftarget)
     downloadweather_check(weathercurrent_url, weatherref_url, weatherref_file, wcurtarget, location, wreftarget)
-    
-=======
-    downloadweather_check(weatherref_url, weatherref_file, wcurtarget, location, wreftarget)
 
->>>>>>> 4d40017b3668cf2d5a6563faa0a06d48e7a05f22
     asset_saved = downloadassets_check(seasons_url, location, seasons)
     print('\ngot the asset: ', asset_saved)
     asset_saved = downloadassets_check(events_url, location, festivals)
@@ -544,8 +399,8 @@ def integratedagricultureview():
         shutil.copyfile(os.path.join(location, avideo), os.path.join(destination, avideo))
 
     return render_template(template, showvideo=avideo)
-#-------------------------------------------------------------------------------
 
+#-------------------------------------------------------------------------------
 if __name__ == '__main__':
     if(len(sys.argv) < 3):
         print('\nplease provide OS, browser and dubug choice when you start the program.')
