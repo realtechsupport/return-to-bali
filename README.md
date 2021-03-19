@@ -26,20 +26,17 @@ Return to Bali runs on Linux and Mac OS under Python3 and Flask with Chromium or
 Recommended browser: Chromium.
 
 
-<<<<<<< HEAD
 <br>Project members</b>
 
 Raunaq Jain, Wawan Sujarwo, Varun Chandola, Marc Böhlen
 
-=======
->>>>>>> 4d40017b3668cf2d5a6563faa0a06d48e7a05f22
 
 <b>Software Installation</b>
 
 Clone the Return to Bali repository from GitHub.
 Open a terminal window and type:
 
-	git clone https://github.com/realtechsupport/ai-ethnobotany.git
+	git clone https://github.com/realtechsupport/return-to-bali.git
  
 
 Cd to the project directory and run the following commands to update the python environment:
@@ -62,12 +59,6 @@ Cd to to the ai-ethnobotany directory again. Install Requirements and Dependenci
 (This may take about 30 minutes.)
 
 	pip3 install -r requirements.txt
-
-
-Generate an STT key (optional)
-
-	See the README_details.pdf for details
-
 
 
 <b>Launch Return to Bali</b>
