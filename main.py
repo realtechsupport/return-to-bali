@@ -14,6 +14,11 @@
 
 # issue: can not get flask-caching to work properly
 # solution: Classic Cache Killer for Chrome; after install check options (right click, enable at start)
+
+# update
+# aroid is in fact suweg. Update across the complete project later.
+# adjust not (see lines 190 ff
+# adjust testclassifiers.html (see line 30)
 #------------------------------------------------------------------------------
 import sys, os, time, shutil, glob
 import eventlet, json
@@ -93,7 +98,7 @@ def index():
 @app.route('/testclassifiers', methods=['GET', 'POST'])
 def testclassifiers():
     form = TestClassifiers()
-    comment = ''
+    comment = ''; morecomments = []
     choice = ''; input = ''; images = ''; files = ''; c_classifier = ''
     result = ''; moreresults = ''; tp_vals = []
     template = 'testclassifiers.html'
@@ -176,6 +181,7 @@ def testclassifiers():
             try:
                 tchoices = session.get('s_choices', None)
                 choice = json.loads(tchoices)
+                #print('\nHERE is the image choice: ', choice)
                 image_path = os.path.join(app.config['FIND'],  testcollection, choice)
                 pclassifier = os.path.join(app.config['MODELS'], classifier)
                 processor='cpu'; tk=3; threshold=90;
@@ -185,27 +191,51 @@ def testclassifiers():
                 for k in tp_indeces:
                     tp_vals.append(class_names[k])
 
-                input = 'selected image: ' + choice
-                c_classifier = 'selected classifier: ' + classifier
+                #---------------------------------------------------------------
+                #check groundtruth
+                c=0
+                groundtruth_found = False
+                for item in tp_vals:
+                    if(item in choice):
+                        #print('\nITEM info: ', item, choice, c)
+                        groundtruth_position = c
+                        groundtruth_found = True
+                    if ('aroid' in item):
+                        tp_vals[c] = 'suweg'
+                        break
+                    c=c+1
 
-                #HERE the new language ---------------------------
+                #Fix aroid -> suweg ... address this formally in the next release...
+                if('aroid' in choice):
+                    choice = 'suweg.jpg'
+                    outcategory = 'suweg'
+
+                #HERE qualify the result  --------------------------------------
                 f_percentage = float(percentage)
                 if(f_percentage > 95):
-                    comment = 'This classifier seems very confident of the validity of the result.'
+                    comment = 'this classifier seems very confident of the validity of the result'
                 elif((f_percentage <= 95) and (f_percentage > 90)):
-                    comment = 'This classifier seems confident of the validity of the result.'
+                    comment = 'this classifier seems confident of the validity of the result'
                 elif((f_percentage <= 90) and (f_percentage > 80)):
-                    comment = 'This classifier seems somewhat unsure of the validity of the result.'
+                    comment = 'this classifier seems somewhat unsure of the validity of the result'
                 elif((f_percentage <= 80) and (f_percentage > 70)):
-                    comment = 'This classifier is not at all confident of the validity of the result.'
+                    comment = 'this classifier is not at all confident of the validity of the result'
                 elif(f_percentage <= 70):
-                    comment = 'This classifier has insufficient confidence in the validity of the result.'
+                    comment = 'this classifier has insufficient confidence in the validity of the result'
                 else:
                     comment = ''
-                #--------------------------------------------------
+                #---------------------------------------------------------------
 
-                result = 'best prediction: ' + outcategory + ' (with confidence level ' + percentage + '%)'
-                moreresults = 'top three predictions: ' + str(tp_vals)
+                input = 'test image: ' + choice
+                c_classifier = 'classifier: ' + classifier
+                result = 'top prediction: ' + outcategory + ' (with confidence level ' + percentage + '%)'
+                moreresults = 'ranked prediction list: ' + str(tp_vals)
+
+                if(groundtruth_found == True):
+                    morecomments = 'plant in selected image (' + choice.split('.jpg')[0] + ') detected in position ' + str(groundtruth_position) + ' of prediction list.'
+                else:
+                    morecomments = 'plant in selected image (' + choice.split('.jpg')[0] + ') -NOT- detected'
+
 
             except:
                 print('... display images before you classify and pick an image with left mouse click... ')
@@ -219,11 +249,12 @@ def testclassifiers():
             try:
                 imagenames = request.form['data']
                 session['s_choices'] = imagenames
+
             except:
                 print('no image selected to classify')
                 pass
 
-    return render_template(template, form=form, images=images, result=result, comment=comment, moreresults=moreresults, classifier=c_classifier, input=input)
+    return render_template(template, form=form, images=images, result=result, comment=comment, morecomments = morecomments, moreresults=moreresults, classifier=c_classifier, input=input)
 
 #-------------------------------------------------------------------------------
 @app.route('/testclassifiers/<filename>')

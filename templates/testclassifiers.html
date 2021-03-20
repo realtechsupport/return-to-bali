@@ -25,7 +25,16 @@
         var im_p = image.src;
         var im = im_p.replace(/^.*[\\\/]/, '');
         im = im.replace(/\?id\=/, '');
-        alert('selected image: '+ im);
+
+        //suweg instead of aroid
+        if(im.includes('aroid')){
+          im_suweg = 'suweg.jpg'
+          alert('selected image: '+ im_suweg);
+        }
+        else{
+          alert('selected image: '+ im);
+        }
+
         SendName(im);
     }
     function SendName(im)
@@ -73,24 +82,26 @@
  <br><br>
 
   <fieldset>
-    <legend>classification results</legend>
+    <legend>observations</legend>
      <p>
        <div class='form-text', text-align='center'
 
-         <textarea rows="50" cols="20" placeholder = "Output of the classification attempt">
+         <textarea rows="60" cols="20" placeholder = "Output of the classification attempt">
           {{input}}
-          <br><br>
+          <br>
           {{classifier}}
-          <br><br>
+          <br>
           {{result}}
           <br><br>
           {{comment}}
           <br><br>
           {{moreresults}}
+          <br>
+          {{morecomments}}
         </textarea>
 
       </div>
-     </p>
+    </p>
   </fieldset>
 
  </center>

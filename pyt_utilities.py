@@ -342,7 +342,7 @@ def predict_image(image_path, model, predict_transform, class_names, tk, process
     _, index = torch.max(output, 1)
     t_percentage = torch.nn.functional.softmax(output, dim=1)[0] * 100
     percentage = t_percentage[index[0]].item()
-    percentage = '%.2f'%(percentage)
+    percentage = '%.1f'%(percentage)
     category = class_names[index[0]]
 
     return(predictions, percentage, category)
