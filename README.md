@@ -1,5 +1,7 @@
 # Return to Bali
 
+![alt text](https://github.com/realtechsupport/c-plus-r/blob/master/snakefruit_bamboo_dragonfruit.png?raw=true)
+
 <b>Introduction</b>
 
 Return to Bali’s goal is to facilitate the creation of under-represented knowledge in machine learning in general, and experimental datasets for neural network image classification in particular. Return to Bali applies these procedures to the study of Ethnobotany on the island of Bali where Mead and Bateson, of second order cybernetics fame, collected field data for the book <i>Balinese Character: A Photographic Analysis </i> (1942). 
