@@ -1,6 +1,6 @@
 # Return to Bali
 
-![alt text](https://github.com/realtechsupport/c-plus-r/blob/master/snakefruit_bamboo_dragonfruit.png?raw=true)
+![alt text](https://github.com/realtechsupport/return-to-bali/blob/master/snakefruit_bamboo_dragonfruit.png?raw=true)
 
 <b>Introduction</b>
 
