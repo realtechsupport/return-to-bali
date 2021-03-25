@@ -10,8 +10,7 @@ While Bali has been subject to numerous exploitative practices, this project aim
 
 Return to Bali includes a dataset, bali-26, produced from field videos documenting 26 ethnobotanically significant plants of South East Asia, several of which are
 indigenous to the island of Bali. The videos show the plants in multiple stages of growth and include fruits, leaves, branches and bark where applicable, from
-multiple locations within the field study site of Central Bali and under varying lighting conditions. It also includes several instances of some of the plants (such as snakefruit).
-at local markets.
+multiple locations within the field study site of Central Bali and under varying lighting conditions. It also includes several instances of some of the plants (such as snakefruit) at local markets.
 
 The high definition mobile phone video files shot by data collectors in the field were converted to labeled images with the <a href="https://github.com/realtechsupport/c-plus-r"> Catch & Release </a> software package.
 
@@ -33,9 +32,10 @@ Return to Bali runs on Linux and Mac OS under Python3 and Flask with Chromium or
 Recommended browser: Chromium.
 
 
-<br>Project members</b>
+<b>Project members</b>
 
 Raunaq Jain, Wawan Sujarwo, Varun Chandola, Marc Böhlen
+
 
 
 <b>Software Installation</b>
