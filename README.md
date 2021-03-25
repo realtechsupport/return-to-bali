@@ -26,19 +26,16 @@ Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)
 Cite this software project as follows: ‘Return to Bali version1’
 
 
-<b>Context</b>
-
-Return to Bali runs on Linux and Mac OS under Python3 and Flask with Chromium or Firefox. 
-Recommended browser: Chromium.
-
-
 <b>Project members</b>
 
 Raunaq Jain, Wawan Sujarwo, Varun Chandola, Marc Böhlen
-
+<br>
 
 
 <b>Software Installation</b>
+
+Return to Bali runs on Linux and Mac OS under Python3 and Flask with Chromium or Firefox. 
+Recommended browser: Chromium.
 
 Clone the Return to Bali repository from GitHub.
 Open a terminal window and type:
