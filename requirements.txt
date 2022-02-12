@@ -41,7 +41,7 @@ mypy==0.761
 mypy-extensions==0.4.3
 networkx==2.4
 numba==0.52.0
-numpy==1.17.4
+numpy>=1.21
 packaging==20.8
 pandas==0.25.3
 pcloud==1.0a8
