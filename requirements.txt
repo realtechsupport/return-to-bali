@@ -7,7 +7,7 @@ BareNecessities==0.2.8
 beautifulsoup4>=4.9.3
 bs4==0.0.1
 cachetools==4.0.0
-certifi==2022.12.07
+certifi>=2022.12.07
 cffi==1.14.4
 chardet>=3.0.4
 Click>=8.0
@@ -16,7 +16,7 @@ cycler==0.10.0
 decorator==4.4.1
 dnspython==1.16.0
 eventlet>=0.31.0
-Flask==2.0.3
+Flask>=2.2.5
 Flask-SocketIO>=5.0
 Flask-WTF>=1.0.0
 greenlet==0.4.15
@@ -28,7 +28,7 @@ imageio==2.8.0
 infinity==1.4
 intervals==0.8.1
 itsdangerous>=2.0
-Jinja2==3.1.1
+Jinja2>=3.1.2
 joblib>=1.2.0
 kiwisolver==1.1.0
 librosa==0.8.0
@@ -78,7 +78,7 @@ typing-extensions==4.5.0
 uritemplate==3.0.1
 urllib3>=1.25.8
 validators==0.14.1
-Werkzeug==2.2.3
+Werkzeug>=2.3.3
 wget==3.2
 WTForms==2.2.1
 WTForms-Components==0.10.4
