@@ -18,7 +18,7 @@ The bali-26 data set is the first (minor) collection of ethnobotanically signifi
 expands the domain of machine learning to include forms of knowledge that have not yet been represented. And on a purely technical level, the project demonstrates
 that even the best machine learning algorithms struggle to understand the visual complexity contained in the rich flora of Bali captured in the wild.
 
-<a href="httpd://realtechsupport.org/projects/return2bali.html">Additional Documentation</a>
+<a href="https://realtechsupport.org/projects/return2bali.html">Additional Documentation</a>
 
 <b>License</b>
 
